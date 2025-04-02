@@ -19,9 +19,9 @@ export const routes: Route[] = [
   { path: '/theme-params', Component: ThemeParamsPage, title: 'Theme Params' },
   { path: '/launch-params', Component: LaunchParamsPage, title: 'Launch Params' },
   {
-    path: '/ton-connect',
+    path: '/wallet',
     Component: TONConnectPage,
-    title: 'TON Connect',
+    title: 'Wallet',
     icon: (
       <svg
         xmlns="http://www.w3.org/2000/svg"
