@@ -1,9 +1,9 @@
 {
-  "name": "reactjs-template",
+  "name": "sol-trading-mini-app",
   "private": true,
   "version": "0.0.1",
   "type": "module",
-  "homepage": "https://telegram-mini-apps.github.io/reactjs-template",
+  "homepage": "https://taiakindaniil.github.io/sol-trading-mini-app",
   "scripts": {
     "deploy": "gh-pages -d dist",
     "dev": "vite",
