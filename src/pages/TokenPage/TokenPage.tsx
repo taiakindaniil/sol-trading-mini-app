@@ -50,7 +50,7 @@ export const TokenPage: FC = () => {
           name: 'Sample Token',
           symbol: 'SMPL',
           price: 0.05,
-          change24h: 3.2,
+          change24h: 3.3,
           icon: 'https://img-v1.raydium.io/icon/So11111111111111111111111111111111111111112.png',
           address: 'So11111111111111111111111111111111111111112',
         });
