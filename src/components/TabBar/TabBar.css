@@ -2,6 +2,7 @@
   background: #000000a6 !important;
   -webkit-backdrop-filter: blur(10px);
   backdrop-filter: blur(10px);
+  padding-bottom: var(--safe-area-bottom);
 }
 
 .tab-bar__tab-bar .tgui-e6658d0b8927f95e {

@@ -5,3 +5,7 @@ body {
   height: 100vh;
   overflow: hidden;
 }
+
+:root {
+  --safe-area-bottom: calc(100vh - var(--tg-viewport-stable-height, 100vh));
+}
