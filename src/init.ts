@@ -12,7 +12,8 @@ import {
   themeParamsState,
   retrieveLaunchParams,
   emitEvent,
-  expandViewport
+  expandViewport,
+  swipeBehavior
 } from '@telegram-apps/sdk-react';
 
 /**
@@ -35,6 +36,10 @@ export async function init(options: {
 
   if (expandViewport.isAvailable()) {
     expandViewport();
+  }
+
+  if (swipeBehavior.disableVertical.isAvailable()) {
+    swipeBehavior.disableVertical();
   }
 
   // Telegram for macOS has a ton of bugs, including cases, when the client doesn't
