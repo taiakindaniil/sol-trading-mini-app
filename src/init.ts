@@ -38,8 +38,8 @@ export async function init(options: {
     expandViewport();
   }
 
-  if (swipeBehavior.disableVertical.isAvailable()) {
-    swipeBehavior.disableVertical();
+  if (swipeBehavior.enableVertical.isAvailable()) {
+    swipeBehavior.enableVertical();
   }
 
   // Telegram for macOS has a ton of bugs, including cases, when the client doesn't
