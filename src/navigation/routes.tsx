@@ -4,8 +4,8 @@ import { IndexPage } from '@/pages/IndexPage/IndexPage';
 import { InitDataPage } from '@/pages/InitDataPage.tsx';
 import { LaunchParamsPage } from '@/pages/LaunchParamsPage.tsx';
 import { ThemeParamsPage } from '@/pages/ThemeParamsPage.tsx';
-import { TONConnectPage } from '@/pages/TONConnectPage/TONConnectPage';
-
+import { WalletPage } from '@/pages/WalletPage/WalletPage';
+import { TokenPage } from '@/pages/TokenPage/TokenPage';
 interface Route {
   path: string;
   Component: ComponentType;
@@ -20,7 +20,7 @@ export const routes: Route[] = [
   { path: '/launch-params', Component: LaunchParamsPage, title: 'Launch Params' },
   {
     path: '/wallet',
-    Component: TONConnectPage,
+    Component: WalletPage,
     title: 'Wallet',
     icon: (
       <svg
@@ -41,4 +41,5 @@ export const routes: Route[] = [
       </svg>
     ),
   },
+  { path: '/token/:tokenAddress', Component: TokenPage, title: 'Token' },
 ];

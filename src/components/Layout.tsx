@@ -1,5 +1,5 @@
 import { type PropsWithChildren } from 'react';
-import { TabBar } from './TabBar';
+import { TabBar } from './TabBar/TabBar';
 
 export function Layout({ children }: PropsWithChildren) {
   return (
@@ -12,7 +12,7 @@ export function Layout({ children }: PropsWithChildren) {
       <main style={{ 
         flex: 1,
         overflow: 'auto',
-        paddingBottom: '60px' // Add padding to prevent content from being hidden behind TabBar
+        paddingBottom: '120px' // Increased padding to accommodate both buttons and TabBar
       }}>
         {children}
       </main>

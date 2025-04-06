@@ -1,0 +1,14 @@
+.wallet-page__headline {
+  margin-top: 20px !important;
+  margin-bottom: 26px !important;
+}
+
+
+.wallet-page__wallet-balance {
+  position: relative;
+  display: block;
+  margin-bottom: 26px !important;
+  width: 100%;
+  text-align: center;
+  font-size: 28px;
+}

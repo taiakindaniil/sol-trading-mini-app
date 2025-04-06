@@ -1,0 +1,27 @@
+.buy-sell-buttons {
+  display: flex;
+  justify-content: space-between;
+  padding: 12px 16px;
+  gap: 16px;
+  position: relative; /* Changed from fixed as it's now placed in a fixed container */
+  z-index: 999;
+}
+
+.buy-button,
+.sell-button {
+  width: 48%;
+  border-radius: 10px;
+  font-weight: bold;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.buy-button {
+  background-color: #4CAF50 !important;
+  color: white !important;
+}
+
+.sell-button {
+  background-color: #F44336 !important;
+  color: white !important;
+} 

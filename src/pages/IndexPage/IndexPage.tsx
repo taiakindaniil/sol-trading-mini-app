@@ -1,28 +1,42 @@
-import { Section, Cell, Image, List } from '@telegram-apps/telegram-ui';
+import { Section, Cell, Image, List, Title, Text } from '@telegram-apps/telegram-ui';
 import type { FC } from 'react';
 
 import { Link } from '@/components/Link/Link.tsx';
 import { Page } from '@/components/Page.tsx';
 
-import tonSvg from './ton.svg';
+const tokens = [
+  {
+    address: '4qQM2x2pfhU3ToscAqkQxTfhTm7DmJe8LGWU9kvqeNH4',
+    name: 'Token',
+    image: 'https://example.com/token.png',
+  },
+  {
+    address: '4qQM2x2pfhU3ToscAqkQxTfhTm7DmJe8LGWU9kvqeNH4',
+    name: 'Token',
+    image: 'https://example.com/token.png',
+  },
+
+];
 
 export const IndexPage: FC = () => {
   return (
     <Page back={false}>
-      <List>
-        <Section
-          header="Features"
-          footer="You can use these pages to learn more about features, provided by Telegram Mini Apps and other useful projects"
-        >
-          <Link to="/ton-connect">
+      <List style={{ padding: '0px' }}>
+        <Title style={{ marginLeft: '20px', marginTop: '20px' }} weight="1">
+          Tokens
+        </Title>
+        {tokens.map((token) => (
+          <Link to={`/token/${token.address}`}>
             <Cell
-              before={<Image src={tonSvg} style={{ backgroundColor: '#007AFF' }}/>}
-              subtitle="Connect your TON wallet"
+              before={<Image src={token.image} style={{ backgroundColor: '#000', borderRadius: '100%' }}/>}
+              subtitle={token.name}
             >
-              TON Connect
+              <Text style={{ color: '#fff' }} weight='1'>{token.name}</Text>
             </Cell>
           </Link>
-        </Section>
+        ))}
+
+        
         <Section
           header="Application Launch Data"
           footer="These pages help developer to learn more about current launch information"

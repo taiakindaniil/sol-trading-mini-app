@@ -1,0 +1,11 @@
+.tab-bar__tab-bar {
+  background: #000000a6 !important;
+  -webkit-backdrop-filter: blur(10px);
+  backdrop-filter: blur(10px);
+}
+
+.tab-bar__tab-bar .tgui-e6658d0b8927f95e {
+  color: #ffffff;
+}
+
+
