@@ -34,12 +34,12 @@ export async function init(options: {
     eruda.position({ x: window.innerWidth - 50, y: 0 });
   });
 
-  if (expandViewport.isAvailable()) {
-    expandViewport();
+  if (swipeBehavior.mount.isAvailable()) {
+    swipeBehavior.mount();
   }
 
-  if (swipeBehavior.enableVertical.isAvailable()) {
-    swipeBehavior.enableVertical();
+  if (swipeBehavior.disableVertical.isAvailable()) {
+    swipeBehavior.disableVertical();
   }
 
   // Telegram for macOS has a ton of bugs, including cases, when the client doesn't
@@ -78,6 +78,7 @@ export async function init(options: {
     }),
     mountViewport.isAvailable() && mountViewport().then(() => {
       bindViewportCssVars();
+      expandViewport();
     }),
   ]);
 }
