@@ -71,7 +71,7 @@
 /* Custom positioning for token page actions */
 .token-page-actions {
   position: fixed;
-  bottom: 53px; /* Above the TabBar */
+  bottom: 53px + var(--safe-area-bottom); /* Above the TabBar */
   background: #000000a6;
   -webkit-backdrop-filter: blur(10px);
   backdrop-filter: blur(10px);
