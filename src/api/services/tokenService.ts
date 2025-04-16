@@ -87,6 +87,11 @@ class TokenService {
     const { data } = await apiClient.get<TokensResponse>('/token/list');
     return data;
   }
+
+  async getTokenInfo(tokenAddress: string): Promise<TokenInfo> {
+    const { data } = await apiClient.get<TokensResponse>(`/token/${tokenAddress}`);
+    return data.data[0];
+  }
 }
 
 export const tokenService = new TokenService();

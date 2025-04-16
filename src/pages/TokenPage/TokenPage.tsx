@@ -28,6 +28,8 @@ import { BuySellButtons } from '@/components/BuySellButtons/BuySellButtons';
 import { useApi } from '@/api';
 
 import './TokenPage.css';
+import { TokenInfo } from '@/api/services/tokenService';
+import { formatMarketCap } from '@/helpers/formatters';
 
 // const [, e] = bem('wallet-page');
 
@@ -35,42 +37,37 @@ export const TokenPage: FC = () => {
   // const initDataState = useSignal(_initDataState);
   const api = useApi(); // This sets up the init data automatically
   const { tokenAddress } = useParams<{ tokenAddress: string }>();
-  const [tokenData, setTokenData] = useState<any>(null);
+  const [tokenData, setTokenData] = useState<TokenInfo | null>(null);
 
   useEffect(() => {
-    // Fetch token data if necessary
     const fetchTokenData = async () => {
       try {
-        // Example API call - replace with your actual API
-        // const data = await api.tokens.getTokenData(tokenAddress);
-        // setTokenData(data);
-        
-        // For now, just set some mock data
-        setTokenData({
-          name: 'Sample Token',
-          symbol: 'SMPL',
-          price: 0.05,
-          change24h: 3.3,
-          icon: 'https://img-v1.raydium.io/icon/So11111111111111111111111111111111111111112.png',
-          address: 'So11111111111111111111111111111111111111112',
-        });
+        const data = await api.token.getTokenInfo(tokenAddress || "");
+        setTokenData(data);
       } catch (error) {
-        console.error('Error fetching token data:', error);
+        console.error("Error fetching token data:", error);
       }
     };
-
-    if (tokenAddress) {
-      fetchTokenData();
-    }
+    
+    // Initial fetch
+    fetchTokenData();
+    
+    // Set up interval for auto-refresh every 15 seconds
+    const refreshInterval = setInterval(fetchTokenData, 15000);
+    
+    // Clean up interval on component unmount
+    return () => {
+      clearInterval(refreshInterval);
+    };
   }, [api, tokenAddress]);
 
   const handleBuy = () => {
-    console.log(`Buy ${tokenData?.symbol || 'token'} at address: ${tokenAddress}`);
+    console.log(`Buy ${tokenData?.token.symbol || 'token'} at address: ${tokenAddress}`);
     // Implement buy logic or navigation
   };
 
   const handleSell = () => {
-    console.log(`Sell ${tokenData?.symbol || 'token'} at address: ${tokenAddress}`);
+    console.log(`Sell ${tokenData?.token.symbol || 'token'} at address: ${tokenAddress}`);
     // Implement sell logic or navigation
   };
 
@@ -80,12 +77,12 @@ export const TokenPage: FC = () => {
         <List>
           {tokenData && (
             <div className="token-header">
-              <Avatar src={tokenData.icon} style={{ backgroundColor: '#000', borderRadius: '100%' }}/>
+              <Avatar src={tokenData.token.image_uri} style={{ backgroundColor: '#000', borderRadius: '100%' }}/>
               <div className="token-title-container">
                 <Text weight="1" className="token-title">
-                  {tokenData.symbol}
+                  {tokenData.token.symbol}
                 </Text>
-                <WalletAddress address={tokenData.address} slice={3} className="token-address" />
+                <WalletAddress address={tokenData.token.address} slice={3} className="token-address" />
               </div>
               <div className="token-info-container">
                 <div>
@@ -93,15 +90,15 @@ export const TokenPage: FC = () => {
                     5m Vol
                   </Text>
                   <Text className="token-info-value">
-                    1000
+                    ${tokenData.metrics?.volume?.m5}
                   </Text>
                 </div>
                 <div>
                   <Text className="token-info-label">
-                    Traders
+                    Trades
                   </Text>
                   <Text className="token-info-value">
-                    221
+                    {(tokenData.metrics?.txns?.m5.buys ?? 0) + (tokenData.metrics?.txns?.m5.sells ?? 0)}
                   </Text>
                 </div>
                 <div>
@@ -109,7 +106,7 @@ export const TokenPage: FC = () => {
                     Liq
                   </Text>
                   <Text className="token-info-value">
-                    4332
+                    ${formatMarketCap(tokenData.metrics?.liquidity?.usd ?? 0)}
                   </Text>
                 </div>
                 <div>
@@ -117,7 +114,7 @@ export const TokenPage: FC = () => {
                     MC
                   </Text>
                   <Text className="token-info-value">
-                    3423
+                    ${formatMarketCap(tokenData.metrics?.market_cap ?? 0)}
                   </Text>
                 </div>
               </div>
@@ -130,14 +127,17 @@ export const TokenPage: FC = () => {
             width="100%"
             height="340"
             style={{ border: 'none', borderRadius: '10px' }}
-            src="https://www.dextools.io/widget-chart/en/solana/pe-light/9J3UL85qVt9Wedp7VYGDcTyJAuuokLzSKznfBSaW8C2j?theme=dark&chartType=1&chartResolution=1&drawingToolbars=false"
+            src={`https://www.dextools.io/widget-chart/en/solana/pe-light/${tokenData?.pool?.address}?theme=dark&chartType=1&chartResolution=1&drawingToolbars=false`}
           />
           
           {/* Additional token information can go here */}
           <div className="token-info-section">
             <Section header="Token Information">
-              <Cell subtitle="Address">
+              <Cell subtitle="Mint address">
                 <Text>{tokenAddress}</Text>
+              </Cell>
+              <Cell subtitle="Pool address">
+                <Text>{tokenData?.pool?.address}</Text>
               </Cell>
               {/* Add more token info here */}
             </Section>

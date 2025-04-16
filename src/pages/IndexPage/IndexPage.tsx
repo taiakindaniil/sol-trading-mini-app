@@ -62,7 +62,7 @@ export const IndexPage: FC = () => {
                 }
                 after={
                   <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'flex-end' }}>
-                    <Text style={{ fontSize: '15px', color: '#c4f85c' }}>MC ${formatMarketCap(tokenInfo.metrics?.market_cap ?? 0)}</Text>
+                    <Text style={{ fontSize: '15px', color: '#c4f85c' }} weight='2'>MC ${formatMarketCap(tokenInfo.metrics?.market_cap ?? 0)}</Text>
                     <Text style={{ fontSize: '14px', color: 'rgba(255, 255, 255, 0.5)' }}>{tokenInfo.pool?.created_at ? formatTimeElapsed(tokenInfo.pool.created_at) : ''}</Text>
                   </div>
                 }
