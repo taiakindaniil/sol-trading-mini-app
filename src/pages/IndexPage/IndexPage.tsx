@@ -1,4 +1,4 @@
-import { Section, Cell, Image, List, Title, Text, Spinner } from '@telegram-apps/telegram-ui';
+import { Cell, Image, List, Title, Text, Spinner } from '@telegram-apps/telegram-ui';
 import type { FC } from 'react';
 import { useEffect, useState } from 'react';
 
