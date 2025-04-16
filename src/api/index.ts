@@ -4,6 +4,7 @@ import type { WalletData, TransactionResponse } from './services/walletService';
 import userService from './services/userService';
 import type { UserProfile, UserSettings } from './services/userService';
 import tradingService from './services/tradingService';
+import tokenService from './services/tokenService';
 import type { 
   MarketData, 
   Order, 
@@ -12,7 +13,6 @@ import type {
 } from './services/tradingService';
 import useApi from './hooks/useApi';
 import createApiService from './createService';
-
 // Export services
 export {
   // API client
@@ -27,6 +27,9 @@ export {
   
   // Trading service
   tradingService,
+
+  // Token service
+  tokenService,
   
   // Hooks
   useApi,
@@ -57,6 +60,7 @@ const api = {
   wallet: walletService,
   user: userService,
   trading: tradingService,
+  token: tokenService,
   setInitData,
 };
 

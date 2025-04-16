@@ -6,6 +6,8 @@ import { LaunchParamsPage } from '@/pages/LaunchParamsPage.tsx';
 import { ThemeParamsPage } from '@/pages/ThemeParamsPage.tsx';
 import { WalletPage } from '@/pages/WalletPage/WalletPage';
 import { TokenPage } from '@/pages/TokenPage/TokenPage';
+import { ReferralPage } from '@/pages/ReferralPage/ReferralPage';
+
 interface Route {
   path: string;
   Component: ComponentType;
@@ -18,6 +20,7 @@ export const routes: Route[] = [
   { path: '/init-data', Component: InitDataPage, title: 'Init Data' },
   { path: '/theme-params', Component: ThemeParamsPage, title: 'Theme Params' },
   { path: '/launch-params', Component: LaunchParamsPage, title: 'Launch Params' },
+  { path: '/referral', Component: ReferralPage, title: 'Referral' },
   {
     path: '/wallet',
     Component: WalletPage,
