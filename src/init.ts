@@ -83,7 +83,7 @@ export async function init(options: {
       expandViewport();
 
       if (setMiniAppHeaderColor.isAvailable() && setMiniAppHeaderColor.supports.rgb()) {
-        setMiniAppHeaderColor('#000');
+        setMiniAppHeaderColor('#000000');
       }
     }),
   ]);
