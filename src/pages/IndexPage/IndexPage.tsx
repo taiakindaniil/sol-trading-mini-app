@@ -1,4 +1,4 @@
-import { Section, Cell, Image, List, Title, Text, Spinner } from '@telegram-apps/telegram-ui';
+import { Section, Cell, Image, List, Title, Text, Spinner, Button } from '@telegram-apps/telegram-ui';
 import type { FC } from 'react';
 import { useEffect, useState } from 'react';
 
@@ -17,31 +17,33 @@ export const IndexPage: FC = () => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
-  useEffect(() => {
-    const fetchTokens = async () => {
-      try {
-        setLoading(true);
-        const response = await api.token.getTokens();
-        setLoadedTokens(response.data);
-        setError(null);
-      } catch (err) {
-        console.error('Failed to fetch tokens:', err);
-        setError('Failed to load tokens. Please try again later.');
-      } finally {
-        setLoading(false);
-      }
-    };
+  const fetchTokens = async () => {
+    try {
+      setLoading(true);
+      const response = await api.token.getTokens();
+      setLoadedTokens(response.data);
+      setError(null);
+    } catch (err) {
+      console.error('Failed to fetch tokens:', err);
+      setError('Failed to load tokens. Please try again later.');
+    } finally {
+      setLoading(false);
+    }
+  };
 
+  useEffect(() => {
     fetchTokens();
   }, []);
 
 
   return (
-    <Page back={false}>
+    <Page>
       <List style={{ padding: '0px' }}>
-        <Title style={{ marginLeft: '20px', marginTop: '20px' }} weight="1">
-          Tokens <span style={{ fontSize: '14px', alignContent: 'center', color: 'rgba(255, 255, 255, 0.5)' }}>• 5 min</span>
-        </Title>
+        <div style={{ display: 'flex', alignItems: 'center', marginLeft: '20px', marginTop: '20px' }}>
+          <Title weight="1" style={{ marginRight: '10px' }}>
+            Tokens <span style={{ fontSize: '14px', alignContent: 'center', color: 'rgba(255, 255, 255, 0.5)' }}>• 5 min</span>
+          </Title>
+        </div>
         {loading ? (
           <List style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '100%' }}>
             <Spinner size="m" />

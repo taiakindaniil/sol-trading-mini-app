@@ -121,14 +121,16 @@ export const TokenPage: FC = () => {
             </div>
           )}
           
-          <iframe
-            id="dextools-widget"
-            title="DEXTools Trading Chart"
-            width="100%"
-            height="340"
-            style={{ border: 'none', borderRadius: '10px' }}
-            src={`https://www.dextools.io/widget-chart/en/solana/pe-light/${tokenData?.pool?.address}?theme=dark&chartType=1&chartResolution=1&drawingToolbars=false`}
-          />
+          { tokenData && (
+            <iframe
+              id="dextools-widget"
+              title="DEXTools Trading Chart"
+              width="100%"
+              height="340"
+              style={{ border: 'none', borderRadius: '10px' }}
+              src={`https://www.dextools.io/widget-chart/en/solana/pe-light/${tokenData?.pool?.address}?theme=dark&chartType=1&chartResolution=1&drawingToolbars=false`}
+            />
+          )}
           
           {/* Additional token information can go here */}
           <div className="token-info-section">
