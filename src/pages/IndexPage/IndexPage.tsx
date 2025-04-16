@@ -81,7 +81,7 @@ export const IndexPage: FC = () => {
         )}
 
         
-        <Section
+        {/* <Section
           header="Application Launch Data"
           footer="These pages help developer to learn more about current launch information"
         >
@@ -94,7 +94,7 @@ export const IndexPage: FC = () => {
           <Link to="/theme-params">
             <Cell subtitle="Telegram application palette information">Theme Parameters</Cell>
           </Link>
-        </Section>
+        </Section> */}
       </List>
     </Page>
   );

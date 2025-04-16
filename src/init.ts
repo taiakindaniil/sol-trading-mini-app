@@ -13,7 +13,8 @@ import {
   retrieveLaunchParams,
   emitEvent,
   expandViewport,
-  swipeBehavior
+  swipeBehavior,
+  setMiniAppHeaderColor
 } from '@telegram-apps/sdk-react';
 
 /**
@@ -40,6 +41,10 @@ export async function init(options: {
 
   if (swipeBehavior.disableVertical.isAvailable()) {
     swipeBehavior.disableVertical();
+  }
+
+  if (setMiniAppHeaderColor.isAvailable() && setMiniAppHeaderColor.supports.rgb()) {
+    setMiniAppHeaderColor('#000');
   }
 
   // Telegram for macOS has a ton of bugs, including cases, when the client doesn't
