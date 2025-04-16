@@ -42,10 +42,6 @@ export async function init(options: {
   if (swipeBehavior.disableVertical.isAvailable()) {
     swipeBehavior.disableVertical();
   }
-  
-  if (setMiniAppHeaderColor.isAvailable() && setMiniAppHeaderColor.supports.rgb()) {
-    setMiniAppHeaderColor('#000');
-  }
 
   // Telegram for macOS has a ton of bugs, including cases, when the client doesn't
   // even response to the "web_app_request_theme" method. It also generates an incorrect
@@ -85,6 +81,10 @@ export async function init(options: {
     mountViewport.isAvailable() && mountViewport().then(() => {
       bindViewportCssVars();
       expandViewport();
+
+      if (setMiniAppHeaderColor.isAvailable() && setMiniAppHeaderColor.supports.rgb()) {
+        setMiniAppHeaderColor('#000');
+      }
     }),
   ]);
 }
