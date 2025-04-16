@@ -90,7 +90,7 @@ export const TokenPage: FC = () => {
                     5m Vol
                   </Text>
                   <Text className="token-info-value">
-                    ${tokenData.metrics?.volume?.m5}
+                    ${formatMarketCap(tokenData.metrics?.volume?.m5 ?? 0)}
                   </Text>
                 </div>
                 <div>
@@ -121,15 +121,25 @@ export const TokenPage: FC = () => {
             </div>
           )}
           
-          { tokenData && (
-            <iframe
-              id="dextools-widget"
-              title="DEXTools Trading Chart"
-              width="100%"
-              height="340"
-              style={{ border: 'none', borderRadius: '10px' }}
-              src={`https://www.dextools.io/widget-chart/en/solana/pe-light/${tokenData?.pool?.address}?theme=dark&chartType=1&chartResolution=1&drawingToolbars=false`}
-            />
+          {tokenData ? (
+            tokenData.pool?.address ? (
+              <iframe
+                id="dextools-widget"
+                title="DEXTools Trading Chart"
+                width="100%"
+                height="340"
+                style={{ border: 'none', borderRadius: '10px' }}
+                src={`https://www.dextools.io/widget-chart/en/solana/pe-light/${tokenData.pool.address}?theme=dark&chartType=1&chartResolution=1&drawingToolbars=false`}
+              />
+            ) : (
+              <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '340px' }}>
+                <Text>Cannot show chart for this token</Text>
+              </div>
+            )
+          ) : (
+            <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '340px' }}>
+              <Text>Loading chart...</Text>
+            </div>
           )}
           
           {/* Additional token information can go here */}
@@ -139,7 +149,7 @@ export const TokenPage: FC = () => {
                 <Text>{tokenAddress}</Text>
               </Cell>
               <Cell subtitle="Pool address">
-                <Text>{tokenData?.pool?.address}</Text>
+                <Text>{tokenData?.pool?.address ?? "No pool address found"}</Text>
               </Cell>
               {/* Add more token info here */}
             </Section>
@@ -151,6 +161,7 @@ export const TokenPage: FC = () => {
           <BuySellButtons 
             onBuy={handleBuy} 
             onSell={handleSell} 
+            lowLiquidity={(tokenData != null && (tokenData?.metrics?.liquidity?.usd ?? 0) < 1000)}
           />
         </div>
       </div>

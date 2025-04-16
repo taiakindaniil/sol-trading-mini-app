@@ -4,9 +4,10 @@ import './BuySellButtons.css';
 interface BuySellButtonsProps {
   onBuy?: () => void;
   onSell?: () => void;
+  lowLiquidity?: boolean;
 }
 
-export function BuySellButtons({ onBuy, onSell }: BuySellButtonsProps) {
+export function BuySellButtons({ onBuy, onSell, lowLiquidity }: BuySellButtonsProps) {
   return (
     <div className="buy-sell-buttons">
       <Button 
@@ -14,9 +15,10 @@ export function BuySellButtons({ onBuy, onSell }: BuySellButtonsProps) {
         mode="filled"
         stretched 
         onClick={onBuy}
+        disabled={lowLiquidity}
         className="buy-button"
       >
-        Buy
+        {lowLiquidity ? "Low Liq" : "Buy"}
       </Button>
       <Button 
         size="m" 
