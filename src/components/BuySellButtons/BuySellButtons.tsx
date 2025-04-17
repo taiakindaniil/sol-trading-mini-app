@@ -20,7 +20,13 @@ export function BuySellButtons({ onBuy, onSell, lowLiquidity, buyValue, sellValu
         disabled={lowLiquidity}
         className="buy-button"
       >
-        {lowLiquidity ? "Low Liq" : "Buy" + ((buyValue ? ` ${buyValue}` : "") + " SOL" )}
+        {lowLiquidity ? (
+          "Low Liq"
+        ) : buyValue ? (
+          `Buy ${buyValue} SOL`
+        ) : (
+          "Set buy amount"
+        )}
       </Button>
       <Button 
         size="m" 
@@ -29,7 +35,11 @@ export function BuySellButtons({ onBuy, onSell, lowLiquidity, buyValue, sellValu
         onClick={onSell}
         className="sell-button"
       >
-        Sell {sellValue}%
+        {sellValue ? (
+          `Sell ${sellValue}%`
+        ) : (
+          "Set sell amount"
+        )}
       </Button>
     </div>
   );
