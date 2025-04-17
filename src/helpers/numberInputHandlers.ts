@@ -7,7 +7,7 @@ type KeyboardEvent = React.KeyboardEvent<HTMLInputElement>;
 
 // Хелперы для обработки ввода чисел с плавающей точкой (FEE и BUY)
 export const createFloatHandlers = (setValue: SetStateNumberFunction) => {
-  // Обработчик изменения значения
+  // Обработчик изменения значения  
   const handleChange = (e: InputEvent) => {
     let inputValue = e.target.value;
     
@@ -102,13 +102,14 @@ export const createFloatHandlers = (setValue: SetStateNumberFunction) => {
         e.preventDefault();
         
         // Заменяем на "0.0"
-        setValue('0.0');
+        const newValue = '0.0';
+        setValue(newValue);
         
         // Устанавливаем курсор после последнего нуля
         setTimeout(() => {
           e.currentTarget.setSelectionRange(3, 3);
         }, 0);
-        
+
         return;
       }
     }
@@ -146,23 +147,34 @@ export const createIntegerHandlers = (setValue: SetStateNumberFunction) => {
     
     // Проверка, что ввод - это пустая строка или целое число
     if (inputValue === '' || /^[0-9]*$/.test(inputValue)) {
+      // Сохраняем исходное значение для проверки изменений
+      let finalValue = inputValue;
+      
       // Специальная обработка нулей
       if (inputValue === '0') {
-        inputValue = '1';
-      } else if (inputValue === '00') {
-        inputValue = '10';
-      } else if (inputValue === '000' || inputValue.length >= 3 && parseInt(inputValue) > 100) {
-        inputValue = '100';
+        finalValue = '1';
+      } 
+      // Если введено ровно 2 нуля
+      else if (inputValue === '00') {
+        finalValue = '10';
+      } 
+      // Если введено 3+ нуля или число больше 100
+      else if (inputValue === '000' || (inputValue.length >= 3 && parseInt(inputValue) > 100)) {
+        finalValue = '100';
+      }
+      // Для чисел больше 100, устанавливаем максимум в 100
+      else if (inputValue !== '' && parseInt(inputValue) > 100) {
+        finalValue = '100';
       }
       
       // Устанавливаем значение
-      setValue(inputValue);
+      setValue(finalValue);
       
       // Если было специальное преобразование, устанавливаем курсор в конец
-      if (e.target.value !== inputValue) {
+      if (e.target.value !== finalValue) {
         setTimeout(() => {
           const inputElement = e.target as HTMLInputElement;
-          inputElement.setSelectionRange(inputValue.length, inputValue.length);
+          inputElement.setSelectionRange(finalValue.length, finalValue.length);
         }, 0);
       }
     }
@@ -179,7 +191,8 @@ export const createIntegerHandlers = (setValue: SetStateNumberFunction) => {
       // Если поле пустое, заменяем на "1"
       if (value === '' && cursorPosition === 0) {
         e.preventDefault();
-        setValue('1');
+        const newValue = '1';
+        setValue(newValue);
         
         setTimeout(() => {
           e.currentTarget.setSelectionRange(1, 1);
@@ -191,7 +204,8 @@ export const createIntegerHandlers = (setValue: SetStateNumberFunction) => {
       // Если в поле один ноль, заменяем на "10"
       if (value === '0' && cursorPosition === 1 && selectionLength === 0) {
         e.preventDefault();
-        setValue('10');
+        const newValue = '10';
+        setValue(newValue);
         
         setTimeout(() => {
           e.currentTarget.setSelectionRange(2, 2);
@@ -203,7 +217,8 @@ export const createIntegerHandlers = (setValue: SetStateNumberFunction) => {
       // Если в поле два нуля, заменяем на "100"
       if (value === '00' && cursorPosition === 2 && selectionLength === 0) {
         e.preventDefault();
-        setValue('100');
+        const newValue = '100';
+        setValue(newValue);
         
         setTimeout(() => {
           e.currentTarget.setSelectionRange(3, 3);
@@ -213,15 +228,16 @@ export const createIntegerHandlers = (setValue: SetStateNumberFunction) => {
       }
       
       // Если новое значение с нулем будет > 100, заменяем на 100
-      const newValue = value.substring(0, cursorPosition) + '0' + value.substring(cursorPosition + selectionLength);
-      if (parseInt(newValue) > 100) {
+      const potentialNewValue = value.substring(0, cursorPosition) + '0' + value.substring(cursorPosition + selectionLength);
+      if (parseInt(potentialNewValue) > 100) {
         e.preventDefault();
-        setValue('100');
+        const newValue = '100';
+        setValue(newValue);
         
         setTimeout(() => {
           e.currentTarget.setSelectionRange(3, 3);
         }, 0);
-        
+
         return;
       }
     }

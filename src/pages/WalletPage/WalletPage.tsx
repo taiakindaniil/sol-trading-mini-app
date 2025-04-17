@@ -1,16 +1,13 @@
-// import { openLink } from '@telegram-apps/sdk-react';
 import {
-  // Avatar,
-  // Cell,
   List,
-  // Navigation,
-  // Section,
   Text,
-  // Title,
   InlineButtons,
   Headline,
   Spinner,
+  Modal,
+  Button,
 } from '@telegram-apps/telegram-ui';
+import { QRCodeSVG } from 'qrcode.react'; 
 
 import {
   initDataState as _initDataState,
@@ -32,6 +29,7 @@ import { WalletData, useApi } from '@/api';
 
 import './WalletPage.css';
 import { WalletAddress } from '@/components/WalletAddress/WalletAddress';
+import { ModalHeader } from '@telegram-apps/telegram-ui/dist/components/Overlays/Modal/components/ModalHeader/ModalHeader';
 
 const [, e] = bem('wallet-page');
 
@@ -72,12 +70,40 @@ export const WalletPage: FC = () => {
           </Text>
 
           <InlineButtons mode="gray">
-            <InlineButtonsItem text="Deposit">
-              <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none">
-                <path d="M12 4L12 16M12 16L16 12M12 16L8 12" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
-                <path d="M4 20L20 20" stroke="currentColor" strokeWidth="2" strokeLinecap="round"/>
-              </svg>
-            </InlineButtonsItem>
+            <Modal
+              header={<ModalHeader>Deposit</ModalHeader>}
+              trigger={
+                <InlineButtonsItem text="Deposit">
+                  <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none">
+                    <path d="M12 4L12 16M12 16L16 12M12 16L8 12" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+                    <path d="M4 20L20 20" stroke="currentColor" strokeWidth="2" strokeLinecap="round"/>
+                  </svg>
+                </InlineButtonsItem>
+              }
+              style={{zIndex: 1000}}
+            >
+              <div style={{ padding: '16px', display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
+                <Text weight="1" style={{ marginBottom: '16px' }}>
+                  Scan this QR code to deposit SOL
+                </Text>
+                <div style={{ background: 'white', padding: '16px', borderRadius: '12px' }}>
+                  <QRCodeSVG 
+                    value={walletData.address} 
+                    size={200}
+                    level="H"
+                  />
+                </div>
+                <Text style={{ marginTop: '16px', textAlign: 'center' }}>
+                  <WalletAddress address={walletData.address} slice={12} />
+                </Text>
+                <Button 
+                  style={{ marginTop: '16px', marginBottom: '16px' }} 
+                  onClick={() => navigator.clipboard.writeText(walletData.address)}
+                >
+                  Copy Address
+                </Button>
+              </div>
+            </Modal>
             <InlineButtonsItem text="Send">
               <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none">
                 <path d="M12 20L12 8M12 8L16 12M12 8L8 12" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>

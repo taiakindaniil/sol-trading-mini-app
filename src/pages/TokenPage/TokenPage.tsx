@@ -14,7 +14,7 @@ import {
   // useSignal,
 } from '@telegram-apps/sdk-react';
 
-import { FC, useState, useEffect } from 'react';
+import { FC, useState, useEffect, useCallback } from 'react';
 import { useParams } from 'react-router-dom';
 
 import { Page } from '@/components/Page';
@@ -41,14 +41,52 @@ export const TokenPage: FC = () => {
   const [slipValue, setSlipValue] = useState<string>("25");
   const [buyValue, setBuyValue] = useState<string>("0.01");
   const [sellValue, setSellValue] = useState<string>("25");
+  
+  // Flag to prevent updates during initial loading
+  const [isInitialLoad, setIsInitialLoad] = useState(true);
 
-  // Используем утилиты для создания обработчиков
+  // Callback to update settings on the server
+  const updateSettings = useCallback(async () => {
+    if (isInitialLoad) return;
+    
+    await api.user.updateSettings({
+      priority_fee_in_sol: Number(feeValue),
+      slippage_percent: Number(slipValue),
+      buy_amount_in_sol: Number(buyValue),
+      sell_amount_percent: Number(sellValue),
+    })
+    .then(() => console.log('Settings updated successfully'))
+    .catch(err => console.error('Failed to update settings:', err));
+  }, [feeValue, slipValue, buyValue, sellValue, isInitialLoad]);
+
+  // Create handlers with the update callback
   const feeHandlers = createFloatHandlers(setFeeValue);
   const slipHandlers = createIntegerHandlers(setSlipValue);
   const buyHandlers = createFloatHandlers(setBuyValue);
   const sellHandlers = createIntegerHandlers(setSellValue);
 
   useEffect(() => {
+    const fetchSettings = async () => {
+      try {
+        setIsInitialLoad(true);
+        const settings = await api.user.getSettings();
+        
+        // Update state with fetched settings
+        setFeeValue(settings.priority_fee_in_sol.toString());
+        setSlipValue(settings.slippage_percent.toString());
+        setBuyValue(settings.buy_amount_in_sol.toString());
+        setSellValue(settings.sell_amount_percent.toString());
+        
+        // After a short delay, allow updates again
+        setTimeout(() => {
+          setIsInitialLoad(false);
+        }, 100);
+      } catch (error) {
+        console.error("Error fetching settings:", error);
+        setIsInitialLoad(false);
+      }
+    };
+
     const fetchTokenData = async () => {
       try {
         const data = await api.token.getTokenInfo(tokenAddress || "");
@@ -57,6 +95,8 @@ export const TokenPage: FC = () => {
         console.error("Error fetching token data:", error);
       }
     };
+
+    fetchSettings();
     
     // Initial fetch
     fetchTokenData();
@@ -69,10 +109,6 @@ export const TokenPage: FC = () => {
       clearInterval(refreshInterval);
     };
   }, [api, tokenAddress]);
-
-  useEffect(() => {
-    console.log(feeValue, slipValue, buyValue, sellValue);
-  }, [feeValue, slipValue, buyValue, sellValue]);
 
   const handleBuy = () => {
     console.log(`Buy ${tokenData?.token.symbol || 'token'} at address: ${tokenAddress}`);
@@ -163,6 +199,7 @@ export const TokenPage: FC = () => {
                 value={feeValue} 
                 onChange={feeHandlers.handleChange}
                 onKeyDown={feeHandlers.handleKeyDown}
+                onBlur={updateSettings}
                 inputMode="decimal"
                 type="text"
                 name="fee"
@@ -175,6 +212,7 @@ export const TokenPage: FC = () => {
                 value={slipValue} 
                 onChange={slipHandlers.handleChange}
                 onKeyDown={slipHandlers.handleKeyDown}
+                onBlur={updateSettings}
                 inputMode="numeric"
                 type="text"
                 name="slip"
@@ -189,6 +227,7 @@ export const TokenPage: FC = () => {
                 value={buyValue} 
                 onChange={buyHandlers.handleChange}
                 onKeyDown={buyHandlers.handleKeyDown}
+                onBlur={updateSettings}
                 inputMode="decimal"
                 type="text"
                 name="buy"
@@ -201,6 +240,7 @@ export const TokenPage: FC = () => {
                 value={sellValue} 
                 onChange={sellHandlers.handleChange}
                 onKeyDown={sellHandlers.handleKeyDown}
+                onBlur={updateSettings}
                 inputMode="numeric"
                 type="text"
                 name="sell"

@@ -10,9 +10,18 @@ export interface UserProfile {
 }
 
 export interface UserSettings {
-  notificationsEnabled: boolean;
-  theme: 'light' | 'dark' | 'system';
-  language: string;
+  priority_fee_in_sol: number;
+  slippage_percent: number;
+  buy_amount_in_sol: number;
+  sell_amount_percent: number;
+  updated_at: string;
+}
+
+export interface UserSettingsResponse {
+  data: UserSettings;
+  success: boolean;
+  message?: string;
+  detail?: string;
 }
 
 /**
@@ -43,8 +52,8 @@ class UserService {
    * @returns Promise with user settings
    */
   async getSettings(): Promise<UserSettings> {
-    const { data } = await apiClient.get<UserSettings>('/user/settings');
-    return data;
+    const { data } = await apiClient.get<UserSettingsResponse>('/my/settings');
+    return data.data;
   }
 
   /**
@@ -53,7 +62,7 @@ class UserService {
    * @returns Promise with updated settings
    */
   async updateSettings(settings: Partial<UserSettings>): Promise<UserSettings> {
-    const { data } = await apiClient.put<UserSettings>('/user/settings', settings);
+    const { data } = await apiClient.post<UserSettings>('/my/settings', settings);
     return data;
   }
 
