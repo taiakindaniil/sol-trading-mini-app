@@ -2,14 +2,10 @@
 import {
   Avatar,
   Cell,
+  Input,
   List,
-  // Navigation,
   Section,
   Text,
-  // Title,
-  // InlineButtons,
-  // Headline,
-  // Button,
 } from '@telegram-apps/telegram-ui';
 
 import {
@@ -30,6 +26,7 @@ import { useApi } from '@/api';
 import './TokenPage.css';
 import { TokenInfo } from '@/api/services/tokenService';
 import { formatMarketCap } from '@/helpers/formatters';
+import { createFloatHandlers, createIntegerHandlers } from '@/helpers/numberInputHandlers';
 
 // const [, e] = bem('wallet-page');
 
@@ -38,6 +35,18 @@ export const TokenPage: FC = () => {
   const api = useApi(); // This sets up the init data automatically
   const { tokenAddress } = useParams<{ tokenAddress: string }>();
   const [tokenData, setTokenData] = useState<TokenInfo | null>(null);
+  
+  // Updated initial values
+  const [feeValue, setFeeValue] = useState<string>("0.01");
+  const [slipValue, setSlipValue] = useState<string>("25");
+  const [buyValue, setBuyValue] = useState<string>("0.01");
+  const [sellValue, setSellValue] = useState<string>("25");
+
+  // Используем утилиты для создания обработчиков
+  const feeHandlers = createFloatHandlers(setFeeValue);
+  const slipHandlers = createIntegerHandlers(setSlipValue);
+  const buyHandlers = createFloatHandlers(setBuyValue);
+  const sellHandlers = createIntegerHandlers(setSellValue);
 
   useEffect(() => {
     const fetchTokenData = async () => {
@@ -60,6 +69,10 @@ export const TokenPage: FC = () => {
       clearInterval(refreshInterval);
     };
   }, [api, tokenAddress]);
+
+  useEffect(() => {
+    console.log(feeValue, slipValue, buyValue, sellValue);
+  }, [feeValue, slipValue, buyValue, sellValue]);
 
   const handleBuy = () => {
     console.log(`Buy ${tokenData?.token.symbol || 'token'} at address: ${tokenAddress}`);
@@ -141,13 +154,64 @@ export const TokenPage: FC = () => {
               <Text>Loading chart...</Text>
             </div>
           )}
+
+          <Text style={{fontSize: '12px', fontWeight: 'bold', marginLeft: '8px'}}>MARKET</Text>
+          <div style={{display: 'flex', flexDirection: 'row', gap: '8px'}}>
+            <div style={{flex: 1, width: '50%'}}>
+              <Input 
+                before={<Text style={{fontSize: '12px', whiteSpace: 'nowrap'}}>FEE</Text>} 
+                value={feeValue} 
+                onChange={feeHandlers.handleChange}
+                onKeyDown={feeHandlers.handleKeyDown}
+                inputMode="decimal"
+                type="text"
+                name="fee"
+                style={{width: '100%'}} 
+              />
+            </div>
+            <div style={{flex: 1, width: '50%'}}>
+              <Input 
+                before={<Text style={{fontSize: '12px', whiteSpace: 'nowrap'}}>SLIP %</Text>} 
+                value={slipValue} 
+                onChange={slipHandlers.handleChange}
+                onKeyDown={slipHandlers.handleKeyDown}
+                inputMode="numeric"
+                type="text"
+                name="slip"
+                style={{width: '100%'}} 
+              />
+            </div>
+          </div>
+          <div style={{display: 'flex', flexDirection: 'row', gap: '8px'}}>
+            <div style={{flex: 1, width: '50%'}}>
+              <Input 
+                before={<Text style={{fontSize: '12px', whiteSpace: 'nowrap'}}>BUY</Text>} 
+                value={buyValue} 
+                onChange={buyHandlers.handleChange}
+                onKeyDown={buyHandlers.handleKeyDown}
+                inputMode="decimal"
+                type="text"
+                name="buy"
+                style={{width: '100%'}}
+              />
+            </div>
+            <div style={{flex: 1, width: '50%'}}>
+              <Input 
+                before={<Text style={{fontSize: '12px', whiteSpace: 'nowrap'}}>SELL %</Text>} 
+                value={sellValue} 
+                onChange={sellHandlers.handleChange}
+                onKeyDown={sellHandlers.handleKeyDown}
+                inputMode="numeric"
+                type="text"
+                name="sell"
+                style={{width: '100%'}}
+              />
+            </div>
+          </div>
           
           {/* Additional token information can go here */}
           <div className="token-info-section">
             <Section header="Token Information">
-              <Cell subtitle="Mint address">
-                <Text>{tokenAddress}</Text>
-              </Cell>
               <Cell subtitle="Pool address">
                 <Text>{tokenData?.pool?.address ?? "No pool address found"}</Text>
               </Cell>
@@ -162,6 +226,8 @@ export const TokenPage: FC = () => {
             onBuy={handleBuy} 
             onSell={handleSell} 
             lowLiquidity={(tokenData != null && (tokenData?.metrics?.liquidity?.usd ?? 0) < 1000)}
+            sellValue={Number(sellValue)}
+            buyValue={Number(buyValue)}
           />
         </div>
       </div>

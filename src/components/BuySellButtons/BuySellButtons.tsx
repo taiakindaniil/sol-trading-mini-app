@@ -5,9 +5,11 @@ interface BuySellButtonsProps {
   onBuy?: () => void;
   onSell?: () => void;
   lowLiquidity?: boolean;
+  sellValue?: number;
+  buyValue?: number;
 }
 
-export function BuySellButtons({ onBuy, onSell, lowLiquidity }: BuySellButtonsProps) {
+export function BuySellButtons({ onBuy, onSell, lowLiquidity, buyValue, sellValue }: BuySellButtonsProps) {
   return (
     <div className="buy-sell-buttons">
       <Button 
@@ -18,7 +20,7 @@ export function BuySellButtons({ onBuy, onSell, lowLiquidity }: BuySellButtonsPr
         disabled={lowLiquidity}
         className="buy-button"
       >
-        {lowLiquidity ? "Low Liq" : "Buy"}
+        {lowLiquidity ? "Low Liq" : "Buy" + ((buyValue ? ` ${buyValue}` : "") + " SOL" )}
       </Button>
       <Button 
         size="m" 
@@ -27,7 +29,7 @@ export function BuySellButtons({ onBuy, onSell, lowLiquidity }: BuySellButtonsPr
         onClick={onSell}
         className="sell-button"
       >
-        Sell
+        Sell {sellValue}%
       </Button>
     </div>
   );
