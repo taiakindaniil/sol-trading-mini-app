@@ -24,6 +24,19 @@ export interface UserSettingsResponse {
   detail?: string;
 }
 
+export interface ReferralData {
+  ref_username: string;
+  referral_commission?: number;
+  referral_count?: number;
+}
+
+export interface ReferralResponse {
+  data: ReferralData;
+  success: boolean;
+  message?: string;
+  detail?: string;
+}
+
 /**
  * Service for handling user-related API calls
  */
@@ -73,6 +86,15 @@ class UserService {
    */
   async linkWallet(walletAddress: string): Promise<{ success: boolean; message: string }> {
     const { data } = await apiClient.post('/user/wallets/link', { walletAddress });
+    return data;
+  }
+
+  /**
+   * Get referral data for the current user
+   * @returns Promise with referral data
+   */
+  async getReferralData(): Promise<ReferralResponse> {
+    const { data } = await apiClient.get<ReferralResponse>('/my/referral');
     return data;
   }
 }

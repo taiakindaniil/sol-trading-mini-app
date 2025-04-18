@@ -5,8 +5,26 @@ body {
   margin: 0;
   height: 100vh;
   overflow: hidden;
+  color: #fff;
 }
 
 :root {
   --safe-area-bottom: calc(100vh - var(--tg-viewport-stable-height, 100vh));
 }
+
+.tgui-7707c5d942b7b9af .tgui-0f5050defacbf813 {
+  background: #1c1c1e !important;
+  color: #fff;
+}
+
+.tgui-30bf4976f818e8bf {
+  background: #1c1c1e !important;
+  color: #fff;
+}
+
+.tgui-97eca24324122dbc .tgui-4b78bed6e925088e {
+  background: #1c1c1e !important;
+  color: #fff;
+}
+
+/* Input::placeholder { */

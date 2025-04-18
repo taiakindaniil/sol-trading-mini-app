@@ -117,7 +117,7 @@ export const WalletPage: FC = () => {
                   <WalletAddress address={walletData.address} slice={12} />
                 </Text>
                 <Button 
-                  style={{ marginTop: '16px', marginBottom: '16px' }} 
+                  style={{ marginTop: '16px', marginBottom: '36px' }} 
                   onClick={() => navigator.clipboard.writeText(walletData.address)}
                 >
                   Copy Address
@@ -151,7 +151,7 @@ export const WalletPage: FC = () => {
                       {privateKey || ""}
                     </Text>
                     <Button 
-                      style={{ marginTop: '16px', marginBottom: '16px' }} 
+                      style={{ marginTop: '16px', marginBottom: '36px' }} 
                       onClick={() => privateKey && navigator.clipboard.writeText(privateKey)}
                       disabled={!privateKey}
                     >

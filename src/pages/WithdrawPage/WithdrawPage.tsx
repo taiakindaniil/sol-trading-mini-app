@@ -35,6 +35,7 @@ export const WithdrawPage: FC = () => {
     const [addressError, setAddressError] = useState<string | null>(null);
     const [amountError, setAmountError] = useState<string | null>(null);
     const [withdrawData, setWithdrawData] = useState<WithdrawResponse | null>(null);
+    const [isWithdrawInProgress, setIsWithdrawInProgress] = useState<boolean>(false);
 
     const amountHandlers = createFloatHandlers(setAmountValue);
   
@@ -110,6 +111,8 @@ export const WithdrawPage: FC = () => {
         return;
       }
 
+      setIsWithdrawInProgress(true);
+
       const amount = parseFloat(amountValue);
       const address = addressValue;
 
@@ -118,6 +121,8 @@ export const WithdrawPage: FC = () => {
         setWithdrawData(response);
       } catch (error) {
         console.error('Withdrawal failed:', error);
+      } finally {
+        setIsWithdrawInProgress(false);
       }
     };
   
@@ -154,6 +159,7 @@ export const WithdrawPage: FC = () => {
             disabled={!addressValue || !!addressError || !amountValue || amountValue === "0" || !!amountError}
             stretched
             onClick={handleWithdraw}
+            loading={isWithdrawInProgress}
           >
             Withdraw
           </Button>

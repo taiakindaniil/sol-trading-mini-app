@@ -2,7 +2,7 @@ import apiClient, { setInitData } from './apiClient';
 import walletService from './services/walletService';
 import type { WalletData, TransactionResponse } from './services/walletService';
 import userService from './services/userService';
-import type { UserProfile, UserSettings } from './services/userService';
+import type { UserProfile, UserSettings, ReferralResponse } from './services/userService';
 import tradingService from './services/tradingService';
 import tokenService from './services/tokenService';
 import type { 
@@ -47,6 +47,7 @@ export type {
   // User types
   UserProfile,
   UserSettings,
+  ReferralResponse,
   
   // Trading types
   MarketData,
