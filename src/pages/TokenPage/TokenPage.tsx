@@ -35,6 +35,8 @@ export const TokenPage: FC = () => {
   const api = useApi(); // This sets up the init data automatically
   const { tokenAddress } = useParams<{ tokenAddress: string }>();
   const [tokenData, setTokenData] = useState<TokenInfo | null>(null);
+
+  const [tokenBalance, setTokenBalance] = useState<number>(0);
   
   // Updated initial values
   const [feeValue, setFeeValue] = useState<string>("0.01");
@@ -96,6 +98,16 @@ export const TokenPage: FC = () => {
       }
     };
 
+    const fetchTokenBalance = async () => {
+      try {
+        const balance = await api.token.getTokenBalance(tokenAddress || "");
+        setTokenBalance(balance);
+      } catch (error) {
+        console.error("Error fetching token balance:", error);
+      }
+    };
+
+    fetchTokenBalance();
     fetchSettings();
     
     // Initial fetch
@@ -268,6 +280,7 @@ export const TokenPage: FC = () => {
             lowLiquidity={(tokenData != null && (tokenData?.metrics?.liquidity?.usd ?? 0) < 1000)}
             sellValue={Number(sellValue)}
             buyValue={Number(buyValue)}
+            disableSell={tokenBalance === 0}
           />
         </div>
       </div>

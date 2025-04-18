@@ -7,9 +7,10 @@ interface BuySellButtonsProps {
   lowLiquidity?: boolean;
   sellValue?: number;
   buyValue?: number;
+  disableSell?: boolean;
 }
 
-export function BuySellButtons({ onBuy, onSell, lowLiquidity, buyValue, sellValue }: BuySellButtonsProps) {
+export function BuySellButtons({ onBuy, onSell, lowLiquidity, buyValue, sellValue, disableSell }: BuySellButtonsProps) {
   return (
     <div className="buy-sell-buttons">
       <Button 
@@ -34,6 +35,7 @@ export function BuySellButtons({ onBuy, onSell, lowLiquidity, buyValue, sellValu
         stretched 
         onClick={onSell}
         className="sell-button"
+        disabled={disableSell}
       >
         {sellValue ? (
           `Sell ${sellValue}%`
