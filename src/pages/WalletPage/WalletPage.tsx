@@ -30,7 +30,7 @@ import { WalletData, useApi } from '@/api';
 import './WalletPage.css';
 import { WalletAddress } from '@/components/WalletAddress/WalletAddress';
 import { ModalHeader } from '@telegram-apps/telegram-ui/dist/components/Overlays/Modal/components/ModalHeader/ModalHeader';
-
+import { useNavigate } from 'react-router-dom';
 const [, e] = bem('wallet-page');
 
 export const WalletPage: FC = () => {
@@ -38,6 +38,10 @@ export const WalletPage: FC = () => {
   const api = useApi(); // This sets up the init data automatically
 
   const [walletData, setWalletData] = useState<WalletData | null>(null);
+  const [privateKey, setPrivateKey] = useState<string | null>(null);
+  const [isExportLoading, setIsExportLoading] = useState(false);
+
+  const navigate = useNavigate();
 
   useEffect(() => {
     const fetchWalletData = async () => {
@@ -52,6 +56,22 @@ export const WalletPage: FC = () => {
     // The init data is automatically set by useApi
     fetchWalletData();
   }, [api]);
+
+  const handleExportClick = async () => {
+    if (!privateKey) {
+      setIsExportLoading(true);
+      try {
+        // Call a separate endpoint to get the private key
+        const exportData = await api.wallet.exportWallet();
+        setPrivateKey(exportData.private_key ?? "");
+      } catch (error) {
+        console.error('Error exporting wallet:', error);
+        // Handle error - maybe show a notification to the user
+      } finally {
+        setIsExportLoading(false);
+      }
+    }
+  };
 
   if (walletData) {
     return (
@@ -104,20 +124,48 @@ export const WalletPage: FC = () => {
                 </Button>
               </div>
             </Modal>
-            <InlineButtonsItem text="Send">
+            <InlineButtonsItem onClick={() => navigate('/withdraw')} text="Send">
               <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none">
                 <path d="M12 20L12 8M12 8L16 12M12 8L8 12" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
                 <path d="M4 4L20 4" stroke="currentColor" strokeWidth="2" strokeLinecap="round"/>
               </svg>
             </InlineButtonsItem>
-            <InlineButtonsItem text="Export">
-              <Icon24QR />
-            </InlineButtonsItem>
-            <InlineButtonsItem text="Change">
+            <Modal
+              header={<ModalHeader>Export</ModalHeader>}
+              trigger={
+                <InlineButtonsItem text="Export" onClick={handleExportClick}>
+                  <Icon24QR />
+                </InlineButtonsItem>
+              }
+              style={{zIndex: 1000}}
+            >
+              <div style={{ padding: '16px', display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
+                <Text weight="1" style={{ marginBottom: '16px' }}>
+                  Your private key
+                </Text>
+                {isExportLoading ? (
+                  <Spinner size="m" />
+                ) : (
+                  <>
+                    <Text style={{ color: 'rgba(255, 255, 255, 0.3)', textAlign: 'center', maxWidth: '80%', wordWrap: 'break-word' }}>
+                      {privateKey || ""}
+                    </Text>
+                    <Button 
+                      style={{ marginTop: '16px', marginBottom: '16px' }} 
+                      onClick={() => privateKey && navigator.clipboard.writeText(privateKey)}
+                      disabled={!privateKey}
+                    >
+                      Copy Private Key
+                    </Button>
+                  </>
+                )}
+              </div>
+            </Modal>
+            {/* <InlineButtonsItem text="Change">
               <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none">
                 <path d="M12 4L12 20M4 12L20 12" stroke="currentColor" strokeWidth="2" strokeLinecap="round"/>
               </svg>
-            </InlineButtonsItem>
+            </InlineButtonsItem> */}
           </InlineButtons>
         </List>
       </Page>

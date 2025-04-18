@@ -12,6 +12,22 @@ export interface TransactionResponse {
   timestamp: number;
 }
 
+export interface WithdrawResponse {
+  status?: string;
+  message?: string;
+  data?: {
+    wallet: string;
+    balance: number;
+    withdrawals: {
+      hash: string;
+      amount_sol: number;
+      wallet_from: string;
+      wallet_to: string;
+      created_at: string;
+    }[];
+  };
+}
+
 /**
  * Service for handling wallet-related API calls
  */
@@ -40,15 +56,6 @@ class WalletService {
   }
 
   /**
-   * Generate a deposit address or link
-   * @returns Promise with deposit information
-   */
-  async getDepositInfo(): Promise<{ address: string; qrCode?: string }> {
-    const { data } = await apiClient.get('/my/wallet/deposit');
-    return data;
-  }
-
-  /**
    * Get transaction history for the current wallet
    * @param limit - Optional limit for number of transactions
    * @param offset - Optional offset for pagination
@@ -65,8 +72,27 @@ class WalletService {
    * Export wallet (e.g., get private key, mnemonic, etc.)
    * @returns Promise with export information
    */
-  async exportWallet(): Promise<{ privateKey?: string; mnemonic?: string; qrCode?: string }> {
+  async exportWallet(): Promise<{ private_key?: string; address?: string }> {
     const { data } = await apiClient.get('/my/wallet/export');
+    return data;
+  }
+
+
+  async getWithdrawals(): Promise<WithdrawResponse> {
+    const { data } = await apiClient.get('/my/wallet/withdraw');
+    return data;
+  }
+
+  /**
+   * Withdraw SOL from the wallet
+   * @param amount - Amount of SOL to withdraw
+   * @param address - Recipient wallet address
+   */
+  async withdraw(amount: number, address: string): Promise<WithdrawResponse> {
+    const { data } = await apiClient.post('/my/wallet/withdraw', {
+      amount,
+      address
+    });
     return data;
   }
 }
