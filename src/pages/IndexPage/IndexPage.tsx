@@ -8,7 +8,6 @@ import { Link } from '@/components/Link/Link.tsx';
 import { Page } from '@/components/Page.tsx';
 import { useApi } from '@/api';
 import { formatMarketCap, formatTimeElapsed } from '@/helpers/formatters';
-
 export const IndexPage: FC = () => {
 
   const api = useApi(); // This sets up the init data automatically
@@ -40,9 +39,14 @@ export const IndexPage: FC = () => {
     <Page>
       <List style={{ padding: '0px' }}>
         <div style={{ display: 'flex', alignItems: 'center', marginLeft: '20px', marginTop: '20px' }}>
-          <Title weight="1" style={{ marginRight: '10px' }}>
-            Tokens <span style={{ fontSize: '14px', alignContent: 'center', color: 'rgba(255, 255, 255, 0.5)' }}>• 5 min</span>
+          <Title weight="1" style={{ marginRight: 'auto' }}>
+            Tokens
           </Title>
+          <div style={{ display: 'flex', gap: '10px' }}>
+            <div>5m</div>
+            <div>1h</div>
+            <div>6h</div>
+          </div>
         </div>
         {loading ? (
           <List style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '100%' }}>

@@ -5,6 +5,7 @@
 .token-header {
   display: flex;
   align-items: center;
+  margin-bottom: 12px;
 }
 
 .token-info-container {
@@ -78,4 +79,8 @@
   left: 0;
   right: 0;
   z-index: 999;
+}
+
+.token-page-table td span {
+  font-size: 12px !important;
 }

@@ -86,7 +86,7 @@ export const WalletPage: FC = () => {
           />
 
           <Text className={e('wallet-balance')} weight="1">
-            {walletData?.balance || 0} SOL
+            {walletData?.balance ? parseFloat(walletData.balance.toString()).toFixed(3) : '0.000'} SOL
           </Text>
 
           <InlineButtons mode="gray">

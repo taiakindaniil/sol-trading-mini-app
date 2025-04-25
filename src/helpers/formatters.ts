@@ -51,3 +51,20 @@ export const formatTimeElapsed = (dateString: string): string => {
     return `${diffInSeconds}s`;
   }
 }; 
+
+/**
+ * Formats very small numbers (like 1e-12) into a readable string
+ * @param num - The number to format
+ * @returns A formatted string representation of the small number
+ */
+export const formatSmallNumber = (num: number): string => {
+  if (num === 0) return '0';
+  if (num >= 0.0001) return num.toFixed(8);
+  
+  // For numbers smaller than 0.0001, use scientific notation
+  const exponent = Math.floor(Math.log10(Math.abs(num)));
+  const coefficient = num / Math.pow(10, exponent);
+  
+  // Format coefficient to 4 decimal places
+  return `${coefficient.toFixed(4)}e${exponent}`;
+};

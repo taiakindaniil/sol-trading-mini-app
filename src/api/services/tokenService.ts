@@ -75,6 +75,20 @@ export interface TokensResponse {
   data: TokenInfo[];
 }
 
+export interface TokenTxHistoryResponse {
+  data: {
+    id: number;
+    token_id: number;
+    tx_type: string;
+    wallet_address: string;
+    amount_sol: number;
+    amount_tokens: number;
+    price_per_token_sol: number;
+    tx_hash: string;
+    created_at: string;
+  }[];
+}
+
 /**
  * Service for handling trading-related API calls
  */
@@ -96,6 +110,11 @@ class TokenService {
   async getTokenBalance(tokenAddress: string): Promise<number> {
     const { data } = await apiClient.get<{data: number}>(`/token/${tokenAddress}/balance`);
     return data.data;
+  }
+
+  async getTokenTxHistory(tokenAddress: string): Promise<TokenTxHistoryResponse> {
+    const { data } = await apiClient.get<TokenTxHistoryResponse>(`/token/${tokenAddress}/transactions`);
+    return data;
   }
 }
 

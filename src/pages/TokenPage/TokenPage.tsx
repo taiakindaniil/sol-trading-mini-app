@@ -1,20 +1,20 @@
 // import { openLink } from '@telegram-apps/sdk-react';
 import {
   Avatar,
-  Cell,
   Input,
   List,
-  Section,
   Text,
 } from '@telegram-apps/telegram-ui';
 
 import {
+  initDataRaw as _initDataRaw,
   initDataState as _initDataState,
+  useSignal,
   // type User,
   // useSignal,
 } from '@telegram-apps/sdk-react';
 
-import { FC, useState, useEffect, useCallback } from 'react';
+import { FC, useState, useEffect, useCallback, useRef } from 'react';
 import { useParams } from 'react-router-dom';
 
 import { Page } from '@/components/Page';
@@ -24,13 +24,14 @@ import { BuySellButtons } from '@/components/BuySellButtons/BuySellButtons';
 import { useApi } from '@/api';
 
 import './TokenPage.css';
-import { TokenInfo } from '@/api/services/tokenService';
-import { formatMarketCap } from '@/helpers/formatters';
+import { TokenInfo, TokenTxHistoryResponse } from '@/api/services/tokenService';
+import { formatMarketCap, formatTimeElapsed, formatSmallNumber } from '@/helpers/formatters';
 import { createFloatHandlers, createIntegerHandlers } from '@/helpers/numberInputHandlers';
-
+import { socket } from '@/socket';
 // const [, e] = bem('wallet-page');
 
 export const TokenPage: FC = () => {
+  const initDataRaw = useSignal(_initDataRaw);
   // const initDataState = useSignal(_initDataState);
   const api = useApi(); // This sets up the init data automatically
   const { tokenAddress } = useParams<{ tokenAddress: string }>();
@@ -43,9 +44,17 @@ export const TokenPage: FC = () => {
   const [slipValue, setSlipValue] = useState<string>("25");
   const [buyValue, setBuyValue] = useState<string>("0.01");
   const [sellValue, setSellValue] = useState<string>("25");
+  const [txHistory, setTxHistory] = useState<TokenTxHistoryResponse | null>(null);
   
   // Flag to prevent updates during initial loading
   const [isInitialLoad, setIsInitialLoad] = useState(true);
+
+  const txHistoryRef = useRef<TokenTxHistoryResponse | null>(null);
+  
+  // Update the ref whenever txHistory changes
+  useEffect(() => {
+    txHistoryRef.current = txHistory;
+  }, [txHistory]);
 
   // Callback to update settings on the server
   const updateSettings = useCallback(async () => {
@@ -66,6 +75,69 @@ export const TokenPage: FC = () => {
   const slipHandlers = createIntegerHandlers(setSlipValue);
   const buyHandlers = createFloatHandlers(setBuyValue);
   const sellHandlers = createIntegerHandlers(setSellValue);
+
+  useEffect(() => {
+    socket.auth = {
+      tma: initDataRaw
+    };
+    socket.connect();
+
+    socket.on('connect', () => {
+      console.log('Connected to socket');
+
+      socket.emit('message', {
+        "token_address": tokenAddress,
+      });
+    });
+
+    socket.on('disconnect', () => {
+      console.log('Disconnected from socket');
+    });
+
+    const handleTxStatus = (data: any) => {
+      console.log('Tx status:', data);
+      if (data.status === 'success') {
+        setTokenBalance(Number(data.token_balance));
+
+        const prevHistory = txHistoryRef.current?.data || [];
+        console.log('prevHistory', prevHistory);
+        
+        setTxHistory({ data: [
+          {
+            id: prevHistory.length + 1,
+            token_id: tokenData?.token.id ?? 0,
+            tx_type: "b",
+            wallet_address: "",
+            amount_sol: data.amount_sol,
+            amount_tokens: data.amount_tokens,
+            price_per_token_sol: data.price_per_token_sol,
+            tx_hash: data.txId,
+            created_at: new Date().toISOString(),
+          },
+          ...prevHistory,
+        ]});
+      } else if (data.status === 'failed') {
+        console.log('Tx failed');
+      } else if (data.status === 'pending') {
+        console.log('Tx pending');
+      }
+    };
+
+    socket.on('tx_status', handleTxStatus);
+
+    socket.on('response', (data: any) => {
+      console.log('Token price update:', data);
+    });
+
+    // Cleanup function to disconnect socket when component unmounts
+    return () => {
+      socket.disconnect();
+      socket.off('connect');
+      socket.off('disconnect');
+      socket.off('response');
+      socket.off('tx_status');
+    };
+  }, [initDataRaw, tokenData?.token.id]); // Removed txHistory from dependencies
 
   useEffect(() => {
     const fetchSettings = async () => {
@@ -107,11 +179,22 @@ export const TokenPage: FC = () => {
       }
     };
 
+    const fetchTxHistory = async () => {
+      try {
+        const history = await api.token.getTokenTxHistory(tokenAddress || "");
+        setTxHistory(history);
+      } catch (error) {
+        console.error("Error fetching token tx history:", error);
+      }
+    };
+
     fetchTokenBalance();
     fetchSettings();
     
     // Initial fetch
     fetchTokenData();
+
+    fetchTxHistory();
     
     // Set up interval for auto-refresh every 15 seconds
     const refreshInterval = setInterval(fetchTokenData, 15000);
@@ -125,11 +208,29 @@ export const TokenPage: FC = () => {
   const handleBuy = () => {
     console.log(`Buy ${tokenData?.token.symbol || 'token'} at address: ${tokenAddress}`);
     // Implement buy logic or navigation
+
+    socket.emit('submit_tx', {
+      "type": "buy",
+      "token_address": tokenAddress,
+      "amount": buyValue,
+      "fee": feeValue,
+      "slippage": slipValue,
+      "timestamp": new Date().toISOString(),
+    });
   };
 
   const handleSell = () => {
     console.log(`Sell ${tokenData?.token.symbol || 'token'} at address: ${tokenAddress}`);
     // Implement sell logic or navigation
+
+    socket.emit('submit_tx', {
+      "type": "sell",
+      "token_address": tokenAddress,
+      "amount": sellValue,
+      "fee": feeValue,
+      "slippage": slipValue,
+      "timestamp": new Date().toISOString(),
+    });
   };
 
   return (
@@ -188,17 +289,17 @@ export const TokenPage: FC = () => {
                 id="dextools-widget"
                 title="DEXTools Trading Chart"
                 width="100%"
-                height="340"
+                height="270"
                 style={{ border: 'none', borderRadius: '10px' }}
                 src={`https://www.dextools.io/widget-chart/en/solana/pe-light/${tokenData.pool.address}?theme=dark&chartType=1&chartResolution=1&drawingToolbars=false`}
               />
             ) : (
-              <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '340px' }}>
+              <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '270px' }}>
                 <Text>Cannot show chart for this token</Text>
               </div>
             )
           ) : (
-            <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '340px' }}>
+            <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '270px' }}>
               <Text>Loading chart...</Text>
             </div>
           )}
@@ -260,16 +361,38 @@ export const TokenPage: FC = () => {
               />
             </div>
           </div>
+
+          <table className="token-page-table">
+            <thead>
+              <tr>
+                <th><Text>#</Text></th>
+                <th><Text>When</Text></th>
+                <th><Text>SOL</Text></th>
+                <th><Text>Tokens</Text></th>
+                <th><Text>Price</Text></th>
+              </tr>
+            </thead>
+            <tbody>
+              {txHistory?.data?.map((tx) => (
+                <tr key={tx.tx_hash}>
+                  <td><Text>{tx.tx_type.charAt(0)}</Text></td>
+                  <td><Text>{formatTimeElapsed(tx.created_at)}</Text></td>
+                  <td><Text>{tx.amount_sol}</Text></td>
+                  <td><Text>{formatMarketCap(tx.amount_tokens)}</Text></td>
+                  <td><Text>{formatSmallNumber(tx.price_per_token_sol)}</Text></td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
           
           {/* Additional token information can go here */}
-          <div className="token-info-section">
+          {/* <div className="token-info-section">
             <Section header="Token Information">
               <Cell subtitle="Pool address">
                 <Text>{tokenData?.pool?.address ?? "No pool address found"}</Text>
               </Cell>
-              {/* Add more token info here */}
             </Section>
-          </div>
+          </div> */}
         </List>
         
         {/* Add the Buy and Sell buttons for this token */}

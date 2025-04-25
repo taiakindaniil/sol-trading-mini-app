@@ -5,6 +5,7 @@ import userService from './services/userService';
 import type { UserProfile, UserSettings, ReferralResponse } from './services/userService';
 import tradingService from './services/tradingService';
 import tokenService from './services/tokenService';
+import type { TokenTxHistoryResponse } from './services/tokenService';
 import type { 
   MarketData, 
   Order, 
@@ -54,6 +55,9 @@ export type {
   Order,
   OrderParams,
   TradeHistory,
+
+  // Token types
+  TokenTxHistoryResponse,
 };
 
 // Create a single API object that contains all services
