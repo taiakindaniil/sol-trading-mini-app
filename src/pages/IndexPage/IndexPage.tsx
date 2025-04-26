@@ -9,6 +9,7 @@ import { Page } from '@/components/Page.tsx';
 import { useApi } from '@/api';
 import { formatMarketCap, formatTimeElapsed } from '@/helpers/formatters';
 import { OptionBlock } from '@/components/OptionBlock/OptionBlock';
+
 export const IndexPage: FC = () => {
 
   const api = useApi(); // This sets up the init data automatically
@@ -17,11 +18,33 @@ export const IndexPage: FC = () => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
+  const timeframes = ['m5', 'h1', 'h24'] as const;
+  type Timeframe = typeof timeframes[number];
+  const [selectedTimeframe, setSelectedTimeframe] = useState<Timeframe>('m5');
+
+  const handleTimeframeChange = (index: number) => {
+    setSelectedTimeframe(timeframes[index]);
+    // Sort existing tokens by volume for the new timeframe
+    setLoadedTokens(prevTokens => {
+      const sortedTokens = [...prevTokens].sort((a, b) => {
+        const volumeA = a.metrics?.volume?.[timeframes[index]] ?? 0;
+        const volumeB = b.metrics?.volume?.[timeframes[index]] ?? 0;
+        return volumeB - volumeA; // Sort in descending order
+      });
+      return sortedTokens;
+    });
+  };
+
   const fetchTokens = async () => {
     try {
       setLoading(true);
       const response = await api.token.getTokens();
-      setLoadedTokens(response.data);
+      const sortedTokens = response.data.sort((a, b) => {
+        const volumeA = a.metrics?.volume?.[selectedTimeframe] ?? 0;
+        const volumeB = b.metrics?.volume?.[selectedTimeframe] ?? 0;
+        return volumeB - volumeA; // Sort in descending order
+      });
+      setLoadedTokens(sortedTokens);
       setError(null);
     } catch (err) {
       console.error('Failed to fetch tokens:', err);
@@ -34,13 +57,6 @@ export const IndexPage: FC = () => {
   useEffect(() => {
     fetchTokens();
   }, []);
-
-  const timeframes = ['5m', '1h', '24h'];
-  const [selectedTimeframe, setSelectedTimeframe] = useState<string>('5m');
-  const handleTimeframeChange = (index: number) => {
-    setSelectedTimeframe(timeframes[index]);
-  };
-
 
   return (
     <Page>
@@ -80,9 +96,9 @@ export const IndexPage: FC = () => {
                       
                       {' '}•{' '}
 
-                      {formatMarketCap(selectedTimeframe === '5m' 
+                      {formatMarketCap(selectedTimeframe === 'm5' 
                         ? (tokenInfo.metrics?.txns?.m5?.buys ?? 0) + (tokenInfo.metrics?.txns?.m5?.sells ?? 0)
-                        : selectedTimeframe === '1h'
+                        : selectedTimeframe === 'h1'
                           ? (tokenInfo.metrics?.txns?.h1?.buys ?? 0) + (tokenInfo.metrics?.txns?.h1?.sells ?? 0)
                           : (tokenInfo.metrics?.txns?.h24?.buys ?? 0) + (tokenInfo.metrics?.txns?.h24?.sells ?? 0)
                       )} txns
