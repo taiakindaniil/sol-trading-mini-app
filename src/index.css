@@ -5,7 +5,7 @@ body {
   margin: 0;
   height: 100vh;
   overflow: hidden;
-  color: #fff;
+  color: #fff !important;
 }
 
 :root {
@@ -25,6 +25,31 @@ body {
 .tgui-97eca24324122dbc .tgui-4b78bed6e925088e {
   background: #1c1c1e !important;
   color: #fff;
+}
+
+/* h1, h2, h3, h4, h5, h6, input {
+  color: #fff !important;
+} */
+
+input {
+  color: #fff !important;
+}
+
+.tgui-6a12827a138e8827 {
+  color: #fff !important;
+}
+
+.tgui-b8dfba0b5c3d054c:hover {
+  background: #1c1c1e !important;
+}
+
+.tgui-cc76354712c6e8d9 {
+  background: black;
+}
+
+.tgui-8a1ca9efa24f4809 {
+  background: #fff;
+  color: #000 !important;
 }
 
 /* Input::placeholder { */

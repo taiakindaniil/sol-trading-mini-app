@@ -8,9 +8,10 @@ interface BuySellButtonsProps {
   sellValue?: number;
   buyValue?: number;
   disableSell?: boolean;
+  isTxProcessing?: boolean;
 }
 
-export function BuySellButtons({ onBuy, onSell, lowLiquidity, buyValue, sellValue, disableSell }: BuySellButtonsProps) {
+export function BuySellButtons({ onBuy, onSell, lowLiquidity, buyValue, sellValue, disableSell, isTxProcessing }: BuySellButtonsProps) {
   return (
     <div className="buy-sell-buttons">
       <Button 
@@ -20,6 +21,7 @@ export function BuySellButtons({ onBuy, onSell, lowLiquidity, buyValue, sellValu
         onClick={onBuy}
         disabled={lowLiquidity}
         className="buy-button"
+        loading={isTxProcessing}
       >
         {lowLiquidity ? (
           "Low Liq"
@@ -36,6 +38,7 @@ export function BuySellButtons({ onBuy, onSell, lowLiquidity, buyValue, sellValu
         onClick={onSell}
         className="sell-button"
         disabled={disableSell}
+        loading={isTxProcessing}
       >
         {sellValue ? (
           `Sell ${sellValue}%`

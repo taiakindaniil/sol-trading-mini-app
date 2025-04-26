@@ -1,0 +1,29 @@
+.option-block {
+  display: flex;
+  gap: 8px;
+  padding: 3px;
+  /* background: #f5f5f5; */
+  border-radius: 8px;
+  font-size: 15px;
+  font-weight: 600;
+  font-family: 'Helvetica', sans-serif;
+}
+
+.option-block__item {
+  padding: 5px 6px;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  background: #1c1c1e;
+  /* border: 1px solid #e0e0e0; */
+}
+
+.option-block__item:hover {
+  /* background: #f0f0f0; */
+}
+
+.option-block__item--selected {
+  background: #ffffff;
+  color: black;
+  border-color: #ffffff;    
+}

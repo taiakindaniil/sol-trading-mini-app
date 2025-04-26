@@ -8,6 +8,7 @@ import { Link } from '@/components/Link/Link.tsx';
 import { Page } from '@/components/Page.tsx';
 import { useApi } from '@/api';
 import { formatMarketCap, formatTimeElapsed } from '@/helpers/formatters';
+import { OptionBlock } from '@/components/OptionBlock/OptionBlock';
 export const IndexPage: FC = () => {
 
   const api = useApi(); // This sets up the init data automatically
@@ -34,19 +35,25 @@ export const IndexPage: FC = () => {
     fetchTokens();
   }, []);
 
+  const timeframes = ['5m', '1h', '24h'];
+  const [selectedTimeframe, setSelectedTimeframe] = useState<string>('5m');
+  const handleTimeframeChange = (index: number) => {
+    setSelectedTimeframe(timeframes[index]);
+  };
+
 
   return (
     <Page>
       <List style={{ padding: '0px' }}>
-        <div style={{ display: 'flex', alignItems: 'center', marginLeft: '20px', marginTop: '20px' }}>
+        <div style={{ display: 'flex', alignItems: 'center', marginLeft: '20px', marginTop: '20px', marginRight: '20px' }}>
           <Title weight="1" style={{ marginRight: 'auto' }}>
             Tokens
           </Title>
-          <div style={{ display: 'flex', gap: '10px' }}>
-            <div>5m</div>
-            <div>1h</div>
-            <div>6h</div>
-          </div>
+          <OptionBlock onChange={handleTimeframeChange} defaultSelected={0}>
+            {timeframes.map((timeframe, index) => (
+              <div key={index}>{timeframe}</div>
+            ))}
+          </OptionBlock>
         </div>
         {loading ? (
           <List style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '100%' }}>
@@ -68,7 +75,14 @@ export const IndexPage: FC = () => {
                 }
                 subtitle={
                   <>
-                    <Text style={{ fontSize: '14px', color: 'rgba(255, 255, 255, 0.5)' }}>{(tokenInfo.metrics?.txns?.h24.buys ?? 0) + (tokenInfo.metrics?.txns?.h24.sells ?? 0)} txns</Text>
+                    <Text style={{ fontSize: '14px', color: 'rgba(255, 255, 255, 0.5)' }}>
+                      {selectedTimeframe === '5m' 
+                        ? (tokenInfo.metrics?.txns?.m5?.buys ?? 0) + (tokenInfo.metrics?.txns?.m5?.sells ?? 0)
+                        : selectedTimeframe === '1h'
+                          ? (tokenInfo.metrics?.txns?.h1?.buys ?? 0) + (tokenInfo.metrics?.txns?.h1?.sells ?? 0)
+                          : (tokenInfo.metrics?.txns?.h24?.buys ?? 0) + (tokenInfo.metrics?.txns?.h24?.sells ?? 0)
+                      } txns
+                    </Text>
                   </>
                 }
                 after={

@@ -49,6 +49,8 @@ export const TokenPage: FC = () => {
   // Flag to prevent updates during initial loading
   const [isInitialLoad, setIsInitialLoad] = useState(true);
 
+  const [isTxProcessing, setIsTxProcessing] = useState(false);
+
   const txHistoryRef = useRef<TokenTxHistoryResponse | null>(null);
   
   // Update the ref whenever txHistory changes
@@ -97,6 +99,7 @@ export const TokenPage: FC = () => {
     const handleTxStatus = (data: any) => {
       console.log('Tx status:', data);
       if (data.status === 'success') {
+        setIsTxProcessing(false);
         setTokenBalance(Number(data.token_balance));
 
         const prevHistory = txHistoryRef.current?.data || [];
@@ -106,7 +109,7 @@ export const TokenPage: FC = () => {
           {
             id: prevHistory.length + 1,
             token_id: tokenData?.token.id ?? 0,
-            tx_type: "b",
+            tx_type: data.tx_type,
             wallet_address: "",
             amount_sol: data.amount_sol,
             amount_tokens: data.amount_tokens,
@@ -117,6 +120,7 @@ export const TokenPage: FC = () => {
           ...prevHistory,
         ]});
       } else if (data.status === 'failed') {
+        setIsTxProcessing(false);
         console.log('Tx failed');
       } else if (data.status === 'pending') {
         console.log('Tx pending');
@@ -206,6 +210,8 @@ export const TokenPage: FC = () => {
   }, [api, tokenAddress]);
 
   const handleBuy = () => {
+    if (isTxProcessing) return;
+    setIsTxProcessing(true);
     console.log(`Buy ${tokenData?.token.symbol || 'token'} at address: ${tokenAddress}`);
     // Implement buy logic or navigation
 
@@ -220,6 +226,8 @@ export const TokenPage: FC = () => {
   };
 
   const handleSell = () => {
+    if (isTxProcessing) return;
+    setIsTxProcessing(true);
     console.log(`Sell ${tokenData?.token.symbol || 'token'} at address: ${tokenAddress}`);
     // Implement sell logic or navigation
 
@@ -375,7 +383,7 @@ export const TokenPage: FC = () => {
             <tbody>
               {txHistory?.data?.map((tx) => (
                 <tr key={tx.tx_hash}>
-                  <td><Text>{tx.tx_type.charAt(0)}</Text></td>
+                  <td><span className={tx.tx_type === 'buy' ? 'token-page-table-buy' : 'token-page-table-sell'}>{tx.tx_type.charAt(0)}</span></td>
                   <td><Text>{formatTimeElapsed(tx.created_at)}</Text></td>
                   <td><Text>{tx.amount_sol}</Text></td>
                   <td><Text>{formatMarketCap(tx.amount_tokens)}</Text></td>
@@ -404,6 +412,7 @@ export const TokenPage: FC = () => {
             sellValue={Number(sellValue)}
             buyValue={Number(buyValue)}
             disableSell={tokenBalance === 0}
+            isTxProcessing={isTxProcessing}
           />
         </div>
       </div>

@@ -84,3 +84,27 @@
 .token-page-table td span {
   font-size: 12px !important;
 }
+
+.token-page-table-buy, .token-page-table-sell {
+  display: block;
+  width: 14px;
+  height: 14px;
+  text-align: center;
+  font-weight: bold;
+  font-family: 'Helvetica', sans-serif;
+  /* background-color: rgba(80, 80, 80, 0.5); */
+  color: #000;
+  padding: 2px;
+  border-radius: 4px;
+  text-transform: uppercase;
+  /* line-height: 16px; */
+  font-size: 10px;
+}
+
+.token-page-table-buy {
+  background-color: #c4f85c;
+}
+
+.token-page-table-sell {
+  background-color: #F44336;
+}
