@@ -39,8 +39,10 @@ input {
   color: #fff !important;
 }
 
-.tgui-b8dfba0b5c3d054c:hover {
-  background: #1c1c1e !important;
+@media (hover: hover) and (pointer: fine) {
+  .tgui-b8dfba0b5c3d054c:hover {
+    background: #1c1c1e !important;
+  }
 }
 
 .tgui-cc76354712c6e8d9 {

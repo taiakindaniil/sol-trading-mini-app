@@ -31,11 +31,13 @@ export const formatTimeElapsed = (dateString: string): string => {
   if (!dateString) return '';
   
   const createdDate = new Date(dateString);
+  // Convert to client's timezone
+  const createdDateInLocalTZ = new Date(createdDate.toLocaleString('en-US', { timeZone: Intl.DateTimeFormat().resolvedOptions().timeZone }));
   // Check if the date is valid
-  if (isNaN(createdDate.getTime())) return '';
+  if (isNaN(createdDateInLocalTZ.getTime())) return '';
   
   const now = new Date();
-  const diffInMs = now.getTime() - createdDate.getTime();
+  const diffInMs = now.getTime() - createdDateInLocalTZ.getTime();
   const diffInSeconds = Math.floor(diffInMs / 1000);
   const diffInMinutes = Math.floor(diffInSeconds / 60);
   const diffInHours = Math.floor(diffInMinutes / 60);

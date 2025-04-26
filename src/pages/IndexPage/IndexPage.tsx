@@ -47,7 +47,7 @@ export const IndexPage: FC = () => {
       <List style={{ padding: '0px' }}>
         <div style={{ display: 'flex', alignItems: 'center', marginLeft: '20px', marginTop: '20px', marginRight: '20px' }}>
           <Title weight="1" style={{ marginRight: 'auto' }}>
-            Tokens
+            🔥 Tokens
           </Title>
           <OptionBlock onChange={handleTimeframeChange} defaultSelected={0}>
             {timeframes.map((timeframe, index) => (
@@ -76,19 +76,28 @@ export const IndexPage: FC = () => {
                 subtitle={
                   <>
                     <Text style={{ fontSize: '14px', color: 'rgba(255, 255, 255, 0.5)' }}>
-                      {selectedTimeframe === '5m' 
+                      <span style={{ color: '#c4f85c' }}>{tokenInfo.pool?.created_at ? formatTimeElapsed(tokenInfo.pool.created_at) : ''}</span>
+                      
+                      {' '}•{' '}
+
+                      {formatMarketCap(selectedTimeframe === '5m' 
                         ? (tokenInfo.metrics?.txns?.m5?.buys ?? 0) + (tokenInfo.metrics?.txns?.m5?.sells ?? 0)
                         : selectedTimeframe === '1h'
                           ? (tokenInfo.metrics?.txns?.h1?.buys ?? 0) + (tokenInfo.metrics?.txns?.h1?.sells ?? 0)
                           : (tokenInfo.metrics?.txns?.h24?.buys ?? 0) + (tokenInfo.metrics?.txns?.h24?.sells ?? 0)
-                      } txns
+                      )} txns
                     </Text>
                   </>
                 }
                 after={
                   <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'flex-end' }}>
-                    <Text style={{ fontSize: '15px', color: '#c4f85c' }} weight='2'>MC ${formatMarketCap(tokenInfo.metrics?.market_cap ?? 0)}</Text>
-                    <Text style={{ fontSize: '14px', color: 'rgba(255, 255, 255, 0.5)' }}>{tokenInfo.pool?.created_at ? formatTimeElapsed(tokenInfo.pool.created_at) : ''}</Text>
+                    <Text style={{ fontSize: '15px', color: '#c4f85c' }} weight='2'>
+                      MC ${formatMarketCap(tokenInfo.metrics?.market_cap ?? 0)}
+                    </Text>
+                    
+                    <Text style={{ fontSize: '14px', color: (tokenInfo.metrics?.liquidity?.usd ?? 0) < 1000 ? 'rgb(255, 115, 115)' : 'rgba(255, 255, 255, 0.5)' }} weight='2'>
+                      LIQ ${formatMarketCap(tokenInfo.metrics?.liquidity?.usd ?? 0)}
+                    </Text>
                   </div>
                 }
               >
