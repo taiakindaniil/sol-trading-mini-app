@@ -1,7 +1,7 @@
 import axios, { AxiosInstance } from 'axios';
 
 // Base API URL
-const API_BASE_URL = 'https://upright-mighty-colt.ngrok-free.app';
+const API_BASE_URL = 'https://sol.jetpump.org';
 
 // Create a custom axios instance with default configuration
 const apiClient: AxiosInstance = axios.create({

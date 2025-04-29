@@ -85,6 +85,7 @@ export interface TokenTxHistoryResponse {
     amount_tokens: number;
     price_per_token_sol: number;
     tx_hash: string;
+    tx_status: string;
     created_at: string;
   }[];
 }
@@ -104,6 +105,11 @@ class TokenService {
 
   async getTokenInfo(tokenAddress: string): Promise<TokenInfo> {
     const { data } = await apiClient.get<TokensResponse>(`/token/${tokenAddress}`);
+    return data.data[0];
+  }
+
+  async searchToken(tokenAddress: string): Promise<TokenInfo> {
+    const { data } = await apiClient.get<TokensResponse>(`/token/${tokenAddress}/search`);
     return data.data[0];
   }
 

@@ -79,6 +79,7 @@ export const TokenPage: FC = () => {
   const sellHandlers = createIntegerHandlers(setSellValue);
 
   useEffect(() => {
+    console.log('initDataRaw', initDataRaw);
     socket.auth = {
       tma: initDataRaw
     };
@@ -115,13 +116,34 @@ export const TokenPage: FC = () => {
             amount_tokens: data.amount_tokens,
             price_per_token_sol: data.price_per_token_sol,
             tx_hash: data.txId,
+            tx_status: "success",
             created_at: new Date().toISOString(),
           },
           ...prevHistory,
         ]});
-      } else if (data.status === 'failed') {
+      } else if (data.status === 'error') {
         setIsTxProcessing(false);
         console.log('Tx failed');
+
+        const prevHistory = txHistoryRef.current?.data || [];
+        console.log('prevHistory', prevHistory);
+        
+        setTxHistory({ data: [
+          {
+            id: prevHistory.length + 1,
+            token_id: 0,
+            tx_type: "failed",
+            wallet_address: "",
+            amount_sol: 0,
+            amount_tokens: 0,
+            price_per_token_sol: 0,
+            tx_hash: data.txId,
+            tx_status: "error",
+            created_at: new Date().toISOString(),
+          },
+          ...prevHistory,
+        ]});
+
       } else if (data.status === 'pending') {
         console.log('Tx pending');
       }
@@ -383,11 +405,15 @@ export const TokenPage: FC = () => {
             <tbody>
               {txHistory?.data?.map((tx) => (
                 <tr key={tx.tx_hash}>
-                  <td><span className={tx.tx_type === 'buy' ? 'token-page-table-buy' : 'token-page-table-sell'}>{tx.tx_type.charAt(0)}</span></td>
-                  <td><Text>{formatTimeElapsed(tx.created_at)}</Text></td>
-                  <td><Text>{tx.amount_sol}</Text></td>
-                  <td><Text>{formatMarketCap(tx.amount_tokens)}</Text></td>
-                  <td><Text>{formatSmallNumber(tx.price_per_token_sol)}</Text></td>
+                  <td>
+                    <span className={tx.tx_status === 'success' ? (tx.tx_type === 'buy' ? 'token-page-table-buy' : 'token-page-table-sell') : 'token-page-table-error'}>
+                      {tx.tx_status === 'success' ? tx.tx_type.charAt(0) : 'F'}
+                    </span>
+                  </td>
+                  <td><Text>{tx.tx_status === 'success' ? formatTimeElapsed(tx.created_at) : ''}</Text></td>
+                  <td><Text>{tx.tx_status === 'success' ? tx.amount_sol : ''}</Text></td>
+                  <td><Text>{tx.tx_status === 'success' ? formatMarketCap(tx.amount_tokens) : ''}</Text></td>
+                  <td><Text>{tx.tx_status === 'success' ? formatSmallNumber(tx.price_per_token_sol) : ''}</Text></td>
                 </tr>
               ))}
             </tbody>

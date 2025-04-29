@@ -1,13 +1,11 @@
 import type { ComponentType, JSX } from 'react';
 
 import { IndexPage } from '@/pages/IndexPage/IndexPage';
-import { InitDataPage } from '@/pages/InitDataPage.tsx';
-import { LaunchParamsPage } from '@/pages/LaunchParamsPage.tsx';
-import { ThemeParamsPage } from '@/pages/ThemeParamsPage.tsx';
 import { WalletPage } from '@/pages/WalletPage/WalletPage';
 import { TokenPage } from '@/pages/TokenPage/TokenPage';
 import { ReferralPage } from '@/pages/ReferralPage/ReferralPage';
 import { WithdrawPage } from '@/pages/WithdrawPage/WithdrawPage';
+import { SearchPage } from '@/pages/SearchPage/SearchPage';
 
 interface Route {
   path: string;
@@ -18,11 +16,12 @@ interface Route {
 
 export const routes: Route[] = [
   { path: '/', Component: IndexPage },
-  { path: '/init-data', Component: InitDataPage, title: 'Init Data' },
-  { path: '/theme-params', Component: ThemeParamsPage, title: 'Theme Params' },
-  { path: '/launch-params', Component: LaunchParamsPage, title: 'Launch Params' },
+  // { path: '/init-data', Component: InitDataPage, title: 'Init Data' },
+  // { path: '/theme-params', Component: ThemeParamsPage, title: 'Theme Params' },
+  // { path: '/launch-params', Component: LaunchParamsPage, title: 'Launch Params' },
   { path: '/referral', Component: ReferralPage, title: 'Referral' },
   { path: '/withdraw', Component: WithdrawPage, title: 'Withdraw' },
+  { path: '/search', Component: SearchPage, title: 'Search' },
   {
     path: '/wallet',
     Component: WalletPage,
