@@ -1,10 +1,9 @@
 import { io } from 'socket.io-client';
-
+import { API_BASE_URL } from '@/config';
 
 // "undefined" means the URL will be computed from the `window.location` object
 // const URL = process.env.NODE_ENV === 'production' ? undefined : 'http://localhost:4000';
-const URL = 'https://sol.jetpump.org';
-export const socket = io(URL, {
+export const socket = io(API_BASE_URL, {
     autoConnect: false,
     transports: ['websocket'],
     extraHeaders: {

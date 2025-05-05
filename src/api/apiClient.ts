@@ -1,7 +1,5 @@
 import axios, { AxiosInstance } from 'axios';
-
-// Base API URL
-const API_BASE_URL = 'https://sol.jetpump.org';
+import { API_BASE_URL } from '@/config';
 
 // Create a custom axios instance with default configuration
 const apiClient: AxiosInstance = axios.create({
