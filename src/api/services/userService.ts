@@ -26,8 +26,8 @@ export interface UserSettingsResponse {
 
 export interface ReferralData {
   ref_username: string;
-  referral_commission?: number;
-  referral_count?: number;
+  ref_percent: number;
+  ref_count?: number;
 }
 
 export interface ReferralResponse {

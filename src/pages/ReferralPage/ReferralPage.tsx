@@ -64,7 +64,7 @@ export const ReferralPage: FC = () => {
                 My Referrals
             </Title>
             <Section footer="Invite your friends to get % of their trades">
-                <Cell subhead="Commision from your refs">20%</Cell>
+                <Cell subhead="Commision from your refs">{referralData?.data.ref_percent}%</Cell>
                 <Cell
                   subhead="Referral Link"
                   onClick={() => handleCopyAddress(`t.me/do0rman_bot?start=ref_${referralData?.data.ref_username}`)}
