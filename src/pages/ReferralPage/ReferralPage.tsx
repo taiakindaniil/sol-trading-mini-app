@@ -68,9 +68,9 @@ export const ReferralPage: FC = () => {
                 <Cell subhead="You invited">{referralData?.data.ref_invited || 0}</Cell>
                 <Cell
                   subhead="Referral Link"
-                  onClick={() => handleCopyAddress(`t.me/do0rman_bot?start=ref_${referralData?.data.ref_username}`)}
+                  onClick={() => handleCopyAddress(`t.me/${referralData?.data.bot_username}?start=ref_${referralData?.data.ref_username}`)}
                 >
-                  t.me/do0rman_bot?start=ref_{referralData?.data.ref_username}
+                  t.me/{referralData?.data.bot_username}?start=ref_{referralData?.data.ref_username}
                 </Cell>
             </Section>
         </List>

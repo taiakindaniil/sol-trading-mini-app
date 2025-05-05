@@ -25,6 +25,7 @@ export interface UserSettingsResponse {
 }
 
 export interface ReferralData {
+  bot_username: string;
   ref_username: string;
   ref_percent: number;
   ref_invited?: number;
