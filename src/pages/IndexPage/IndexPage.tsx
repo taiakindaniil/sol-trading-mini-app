@@ -59,7 +59,7 @@ export const IndexPage: FC = () => {
   }, []);
 
   return (
-    <Page>
+    <Page back={false}>
       <List style={{ padding: '0px' }}>
         <div style={{ display: 'flex', alignItems: 'center', marginLeft: '20px', marginTop: '20px', marginRight: '20px' }}>
           <Title weight="1" style={{ marginRight: 'auto' }}>

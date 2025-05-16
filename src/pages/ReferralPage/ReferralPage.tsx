@@ -57,7 +57,7 @@ export const ReferralPage: FC = () => {
 
   if (referralData) {
     return (
-      <Page>
+      <Page back={false}>
 
         <List>
             <Title style={{ marginLeft: '0px', marginTop: '10px' }} weight="1">
@@ -89,7 +89,7 @@ export const ReferralPage: FC = () => {
   }
 
   return (
-    <Page>
+    <Page back={false}>
       <List style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '100%' }}>
         <Spinner size="m" />
       </List>

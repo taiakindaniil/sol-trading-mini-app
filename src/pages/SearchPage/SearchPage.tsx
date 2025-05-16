@@ -83,7 +83,7 @@ export const SearchPage: FC = () => {
     };
   
     return (
-        <Page>
+        <Page back={false}>
             <List style={{ paddingTop: '0px' }}>
             <div style={{ display: 'flex', alignItems: 'center', marginTop: '20px' }}>
                 <Title weight="1" style={{ marginRight: 'auto' }}>

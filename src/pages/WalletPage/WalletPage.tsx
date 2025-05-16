@@ -75,7 +75,7 @@ export const WalletPage: FC = () => {
 
   if (walletData) {
     return (
-      <Page>
+      <Page back={false}>
         <List style={{ textAlign: 'center' }}>
           <Headline className={e('headline')} weight="1">
             Your Wallet
@@ -173,7 +173,7 @@ export const WalletPage: FC = () => {
   }
 
   return (
-    <Page>
+    <Page back={false}>
       <List style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '100%' }}>
         <Spinner size="m" />
       </List>
