@@ -413,7 +413,7 @@ export const TokenPage: FC = () => {
                   </td>
                   <td style={{position: 'relative'}}>
                     <Text>
-                      {tx.tx_status === 'failed' ? <span style={{position: 'absolute', whiteSpace: 'nowrap'}}>Insufficient balance</span> : ''}
+                      {tx.tx_status === 'error' ? <span style={{position: 'absolute', whiteSpace: 'nowrap'}}>Insufficient balance</span> : ''}
                       {tx.tx_status === 'success' ? formatTimeElapsed(tx.created_at) : ''}
                     </Text>
                   </td>
