@@ -133,6 +133,7 @@ export const TokenPage: FC = () => {
             id: prevHistory.length + 1,
             token_id: 0,
             tx_type: "failed",
+            error_type: data.error_type,
             wallet_address: "",
             amount_sol: 0,
             amount_tokens: 0,
@@ -410,7 +411,12 @@ export const TokenPage: FC = () => {
                       {tx.tx_status === 'success' ? tx.tx_type.charAt(0) : 'F'}
                     </span>
                   </td>
-                  <td><Text>{tx.tx_status === 'success' ? formatTimeElapsed(tx.created_at) : ''}</Text></td>
+                  <td style={{position: 'relative'}}>
+                    <Text>
+                      {tx.tx_status === 'failed' ? <span style={{position: 'absolute', whiteSpace: 'nowrap'}}>Insufficient balance</span> : ''}
+                      {tx.tx_status === 'success' ? formatTimeElapsed(tx.created_at) : ''}
+                    </Text>
+                  </td>
                   <td><Text>{tx.tx_status === 'success' ? tx.amount_sol : ''}</Text></td>
                   <td><Text>{tx.tx_status === 'success' ? formatMarketCap(tx.amount_tokens) : ''}</Text></td>
                   <td><Text>{tx.tx_status === 'success' ? formatSmallNumber(tx.price_per_token_sol) : ''}</Text></td>
