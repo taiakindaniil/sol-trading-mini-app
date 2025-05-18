@@ -80,6 +80,7 @@ export interface TokenTxHistoryResponse {
     id: number;
     token_id: number;
     tx_type: string;
+    error_type?: string;
     wallet_address: string;
     amount_sol: number;
     amount_tokens: number;
@@ -88,6 +89,10 @@ export interface TokenTxHistoryResponse {
     tx_status: string;
     created_at: string;
   }[];
+}
+
+export interface PositionsResponse {
+
 }
 
 /**
@@ -120,6 +125,11 @@ class TokenService {
 
   async getTokenTxHistory(tokenAddress: string): Promise<TokenTxHistoryResponse> {
     const { data } = await apiClient.get<TokenTxHistoryResponse>(`/token/${tokenAddress}/transactions`);
+    return data;
+  }
+
+  async getPositions(): Promise<PositionsResponse> {
+    const { data } = await apiClient.get<PositionsResponse>(`/my/positions`);
     return data;
   }
 }
