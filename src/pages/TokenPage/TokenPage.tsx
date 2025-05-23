@@ -30,6 +30,19 @@ import { createFloatHandlers, createIntegerHandlers } from '@/helpers/numberInpu
 import { socket } from '@/socket';
 // const [, e] = bem('wallet-page');
 
+const getErrorType = (errorType: string) => {
+  switch (errorType) {
+    case 'insufficient_balance':
+      return 'Insufficient balance';
+    case 'slippage_error':
+      return 'Slippage';
+    case 'low_liquidity':
+      return 'Low liquidity';
+    default:
+      return 'Something went wrong';
+  }
+}
+
 export const TokenPage: FC = () => {
   const initDataRaw = useSignal(_initDataRaw);
   // const initDataState = useSignal(_initDataState);
@@ -40,7 +53,7 @@ export const TokenPage: FC = () => {
   const [tokenBalance, setTokenBalance] = useState<number>(0);
   
   // Updated initial values
-  const [feeValue, setFeeValue] = useState<string>("0.01");
+  const [feeValue, setFeeValue] = useState<string>("0.0001");
   const [slipValue, setSlipValue] = useState<string>("25");
   const [buyValue, setBuyValue] = useState<string>("0.01");
   const [sellValue, setSellValue] = useState<string>("25");
@@ -413,7 +426,7 @@ export const TokenPage: FC = () => {
                   </td>
                   <td style={{position: 'relative'}}>
                     <Text>
-                      {tx.tx_status === 'error' ? <span style={{position: 'absolute', whiteSpace: 'nowrap', top: 0, left: 0}}>Insufficient balance</span> : ''}
+                      {tx.tx_status === 'error' ? <span style={{position: 'absolute', whiteSpace: 'nowrap', top: 0, left: 0}}>{getErrorType(tx.error_type ?? '')}</span> : ''}
                       {tx.tx_status === 'success' ? formatTimeElapsed(tx.created_at) : ''}
                     </Text>
                   </td>
