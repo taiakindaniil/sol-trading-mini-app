@@ -76,11 +76,10 @@ export async function init(options: {
   await Promise.all([
     mountMiniApp.isAvailable() && mountMiniApp().then(() => {
       bindThemeParamsCssVars();
-
     }),
     mountViewport.isAvailable() && mountViewport().then(() => {
-      bindViewportCssVars();
       expandViewport();
+      bindViewportCssVars();
 
       if (setMiniAppHeaderColor.isAvailable() && setMiniAppHeaderColor.supports.rgb()) {
         setMiniAppHeaderColor('#000000');

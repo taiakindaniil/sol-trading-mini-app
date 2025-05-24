@@ -1,3 +1,9 @@
+:root {
+  --safe-area-bottom: calc(
+    var(--tg-viewport-safe-area-inset-bottom, 0px) + var(--tg-viewport-content-safe-area-inset-bottom, 0px)
+  );
+}
+
 body {
   /* background: var(--tg-theme-secondary-bg-color, white); */
   background: #000;
@@ -6,10 +12,6 @@ body {
   height: 100vh;
   overflow: hidden;
   color: #fff !important;
-}
-
-:root {
-  --safe-area-bottom: calc(var(--tg-safe-area-inset-bottom, 0px) + var(--tg-content-safe-area-inset-bottom, 0px));
 }
 
 .tgui-7707c5d942b7b9af .tgui-0f5050defacbf813 {
