@@ -97,13 +97,13 @@ class WalletService {
   }
 
   /**
-   * Set new wallet using a private key
-   * @param privateKey - Base64 encoded private key
+   * Import a wallet using a private key
+   * @param privateKey - Base58 encoded private key
    * @returns Promise with wallet data
    */
   async setNewWallet(privateKey: string): Promise<WalletData> {
     const { data } = await apiClient.post<WalletData>('/my/wallet/change', {
-      'private_key': privateKey
+      private_key: privateKey
     });
     return data;
   }

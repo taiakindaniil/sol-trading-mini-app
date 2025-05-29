@@ -102,6 +102,7 @@ export const WalletPage: FC = () => {
       const newWalletData = await api.wallet.setNewWallet(privateKey);
       setWalletData({ address: newWalletData.address, balance: newWalletData.balance });
       setIsNewWalletPage(false);
+      setIsImportPage(false);
     } catch (error) {
       console.error('Error saving new wallet:', error);
     }
