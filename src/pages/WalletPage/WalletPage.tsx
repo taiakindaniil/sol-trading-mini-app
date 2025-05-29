@@ -52,7 +52,6 @@ export const WalletPage: FC = () => {
 
   const navigate = useNavigate();
 
-
   useEffect(() => {
     const fetchWalletData = async () => {
       try {
@@ -99,7 +98,7 @@ export const WalletPage: FC = () => {
     
     try {
       // Convert private key to base64 string using browser APIs
-      const privateKey = btoa(String.fromCharCode.apply(null, Array.from(newWallet.keypair.secretKey)));
+      const privateKey = bs58.encode(newWallet.keypair.secretKey);
       const newWalletData = await api.wallet.setNewWallet(privateKey);
       setWalletData({ address: newWalletData.address, balance: newWalletData.balance });
       setIsNewWalletPage(false);
@@ -118,16 +117,21 @@ export const WalletPage: FC = () => {
     try {
       if (privateKeyInputValue.length === 0) {
         setPrivateKeyInputError(null);
+        setNewWallet(null);
         return false;
       }
       
       // Try to create a PublicKey object - this will validate the address
       const privateKeyBytes = bs58.decode(privateKeyInputValue);
-      Keypair.fromSecretKey(privateKeyBytes); // just checking if it's valid
+      const keypair = Keypair.fromSecretKey(privateKeyBytes); // just checking if it's valid
       setPrivateKeyInputError(null);
+
+      setNewWallet({ keypair, address: keypair.publicKey.toString() })
+
       return true;
     } catch (error) {
       setPrivateKeyInputError("Invalid private key");
+      setNewWallet(null);
       return false;
     }
   };
@@ -273,7 +277,7 @@ export const WalletPage: FC = () => {
                   <Button 
                     stretched
                     style={{ marginBottom: '12px' }} 
-                    onClick={() => newWallet && navigator.clipboard.writeText(btoa(String.fromCharCode.apply(null, Array.from(newWallet.keypair.secretKey))))}
+                    onClick={() => newWallet && navigator.clipboard.writeText(bs58.encode(newWallet.keypair.secretKey))}
                   >
                     Copy Private Key
                   </Button>
