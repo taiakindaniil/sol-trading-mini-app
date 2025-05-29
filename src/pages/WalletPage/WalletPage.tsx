@@ -101,6 +101,7 @@ export const WalletPage: FC = () => {
       const privateKey = bs58.encode(newWallet.keypair.secretKey);
       const newWalletData = await api.wallet.setNewWallet(privateKey);
       setWalletData({ address: newWalletData.address, balance: newWalletData.balance });
+      setNewWallet(null);
       setIsNewWalletPage(false);
       setIsImportPage(false);
     } catch (error) {
