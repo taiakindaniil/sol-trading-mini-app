@@ -95,6 +95,18 @@ class WalletService {
     });
     return data;
   }
+
+  /**
+   * Set new wallet using a private key
+   * @param privateKey - Base64 encoded private key
+   * @returns Promise with wallet data
+   */
+  async setNewWallet(privateKey: string): Promise<WalletData> {
+    const { data } = await apiClient.post<WalletData>('/my/wallet/change', {
+      'private_key': privateKey
+    });
+    return data;
+  }
 }
 
 export const walletService = new WalletService();

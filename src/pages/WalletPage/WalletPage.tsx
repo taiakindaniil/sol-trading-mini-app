@@ -6,8 +6,12 @@ import {
   Spinner,
   Modal,
   Button,
+  Cell,
+  Input
 } from '@telegram-apps/telegram-ui';
 import { QRCodeSVG } from 'qrcode.react'; 
+import { Keypair } from '@solana/web3.js';
+import bs58 from 'bs58';
 
 import {
   initDataState as _initDataState,
@@ -41,7 +45,13 @@ export const WalletPage: FC = () => {
   const [privateKey, setPrivateKey] = useState<string | null>(null);
   const [isExportLoading, setIsExportLoading] = useState(false);
 
+  const [isImportPage, setIsImportPage] = useState(false);
+  const [isNewWalletPage, setIsNewWalletPage] = useState(false);
+  
+  const [newWallet, setNewWallet] = useState<{ keypair: Keypair; address: string } | null>(null);
+
   const navigate = useNavigate();
+
 
   useEffect(() => {
     const fetchWalletData = async () => {
@@ -57,6 +67,17 @@ export const WalletPage: FC = () => {
     fetchWalletData();
   }, [api]);
 
+  useEffect(() => {
+    if (isNewWalletPage && !newWallet) {
+      // Generate new wallet when entering new wallet page
+      const keypair = Keypair.generate();
+      setNewWallet({
+        keypair,
+        address: keypair.publicKey.toString()
+      });
+    }
+  }, [isNewWalletPage]);
+
   const handleExportClick = async () => {
     if (!privateKey) {
       setIsExportLoading(true);
@@ -71,6 +92,50 @@ export const WalletPage: FC = () => {
         setIsExportLoading(false);
       }
     }
+  };
+
+  const handleSaveNewWallet = async () => {
+    if (!newWallet) return;
+    
+    try {
+      // Convert private key to base64 string using browser APIs
+      const privateKey = btoa(String.fromCharCode.apply(null, Array.from(newWallet.keypair.secretKey)));
+      const newWalletData = await api.wallet.setNewWallet(privateKey);
+      setWalletData({ address: newWalletData.address, balance: newWalletData.balance });
+      setIsNewWalletPage(false);
+    } catch (error) {
+      console.error('Error saving new wallet:', error);
+    }
+  };
+
+
+  // Private Key Import
+
+  const [privateKeyInputValue, setPrivateKeyInputValue] = useState<string>();
+  const [privateKeyInputError, setPrivateKeyInputError] = useState<string | null>(null);
+
+  const validatePrivateKeyInput = (privateKeyInputValue: string): boolean => {
+    try {
+      if (privateKeyInputValue.length === 0) {
+        setPrivateKeyInputError(null);
+        return false;
+      }
+      
+      // Try to create a PublicKey object - this will validate the address
+      const privateKeyBytes = bs58.decode(privateKeyInputValue);
+      Keypair.fromSecretKey(privateKeyBytes); // just checking if it's valid
+      setPrivateKeyInputError(null);
+      return true;
+    } catch (error) {
+      setPrivateKeyInputError("Invalid private key");
+      return false;
+    }
+  };
+
+  const handlePrivateKeyInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+      const value = e.target.value;
+      setPrivateKeyInputValue(value);
+      validatePrivateKeyInput(value);
   };
 
   if (walletData) {
@@ -161,11 +226,88 @@ export const WalletPage: FC = () => {
                 )}
               </div>
             </Modal>
-            {/* <InlineButtonsItem text="Change">
-              <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none">
-                <path d="M12 4L12 20M4 12L20 12" stroke="currentColor" strokeWidth="2" strokeLinecap="round"/>
-              </svg>
-            </InlineButtonsItem> */}
+            <Modal
+              header={<ModalHeader>Change wallet</ModalHeader>}
+              trigger={
+                <InlineButtonsItem text="Change">
+                  <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none">
+                    <path d="M12 4L12 20M4 12L20 12" stroke="currentColor" strokeWidth="2" strokeLinecap="round"/>
+                  </svg>
+                </InlineButtonsItem>
+              }
+              style={{zIndex: 1000, height: '500px'}}
+            >
+              { isImportPage && <div style={{display: 'flex', flexDirection: 'column', margin: '5px 20px', gap: '12px'}}>
+                <Input
+                  placeholder='Enter your Private Key'
+                  value={privateKeyInputValue}
+                  onChange={handlePrivateKeyInputChange}
+                  status={privateKeyInputError ? "error" : undefined}
+                />
+                <Button stretched size='m' className={e('save-changes-button')} disabled={privateKeyInputError != null || privateKeyInputValue?.length == 0}>Import Wallet</Button>
+                <Button stretched mode="gray"
+                  onClick={() => {
+                    setIsImportPage(false);
+                    setNewWallet(null);
+                    setPrivateKeyInputValue("");
+                  }}
+                >
+                  Cancel
+                </Button>
+              </div> || isNewWalletPage && <>
+                <div style={{ padding: '5px 16px 40px 16px', display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
+                  <Text weight="1" style={{ paddingTop: '0px', marginBottom: '16px' }}>
+                    Your new wallet has been generated
+                  </Text>
+                  <Text weight="1" style={{ fontSize: '15px', marginBottom: '8px' }}>Wallet Address</Text>
+                  <Text
+                    style={{ color: 'rgba(255, 255, 255, 0.3)', textAlign: 'center', maxWidth: '80%', wordWrap: 'break-word', marginBottom: '16px' }}
+                    onClick={() => newWallet && navigator.clipboard.writeText(newWallet.address)}
+                  >
+                    <WalletAddress address={newWallet?.address ?? ""} slice={12} />
+                  </Text>
+                  <Text weight="1" style={{ fontSize: '15px', marginBottom: '8px' }}>Private Key</Text>
+                  <Text style={{ color: 'rgba(255, 255, 255, 0.3)', textAlign: 'center', maxWidth: '80%', wordWrap: 'break-word', marginBottom: '24px' }}>
+                    {newWallet ? bs58.encode(newWallet.keypair.secretKey) : ''}
+                  </Text>
+                  <Button 
+                    stretched
+                    style={{ marginBottom: '12px' }} 
+                    onClick={() => newWallet && navigator.clipboard.writeText(btoa(String.fromCharCode.apply(null, Array.from(newWallet.keypair.secretKey))))}
+                  >
+                    Copy Private Key
+                  </Button>
+                  <Button 
+                    stretched
+                    className={e('save-changes-button')}
+                    style={{ marginBottom: '12px', background: '#' }} 
+                    onClick={handleSaveNewWallet}
+                  >
+                    Save Wallet
+                  </Button>
+                  <Button stretched mode="gray"
+                    onClick={() => {
+                      setIsNewWalletPage(false);
+                      setNewWallet(null);
+                    }}
+                  >
+                    Cancel
+                  </Button>
+                </div>
+              </> || <>
+                <div style={{marginBottom: '200px'}}>
+                  <Cell subtitle="Creating a solana wallet" onClick={() => setIsNewWalletPage(true)}>
+                    Generate a new wallet
+                  </Cell>
+                  <Cell subtitle="Import a solana wallet using private key" onClick={() => setIsImportPage(true)}>
+                    Import a wallet
+                  </Cell>
+                  <span className={e('change-wallet-caution')}>
+                    Your previous wallet will be removed from the app
+                  </span>
+                </div>
+              </>}
+            </Modal>
           </InlineButtons>
         </List>
       </Page>

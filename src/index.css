@@ -14,6 +14,10 @@ body {
   color: #fff !important;
 }
 
+* {
+  font-family: var(--tgui--font-family);
+}
+
 .tgui-7707c5d942b7b9af .tgui-0f5050defacbf813 {
   background: #1c1c1e !important;
   color: #fff;
@@ -62,3 +66,13 @@ input {
 }
 
 /* Input::placeholder { */
+
+/* button mode=gray */
+.tgui-93106efd6b6d66ee {
+  background-color: rgba(255,255,255, 0.2);
+  color: #fff;
+}
+
+.tgui-f67c8fb3553eee55:before {
+  background: rgba(255,255,255, 0.2);
+}

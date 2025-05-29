@@ -12,3 +12,18 @@
   text-align: center;
   font-size: 28px;
 }
+
+.wallet-page__change-wallet-caution {
+  display: block;
+  position: relative;
+  top: 20px;
+  width: 100%;
+  color: #ffb92e;
+  text-align: center;
+  font-size: 12px;
+}
+
+.wallet-page__save-changes-button {
+  background-color: #c4f85c !important;
+  color: black !important;
+}
