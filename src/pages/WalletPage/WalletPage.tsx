@@ -249,7 +249,15 @@ export const WalletPage: FC = () => {
                   onChange={handlePrivateKeyInputChange}
                   status={privateKeyInputError ? "error" : undefined}
                 />
-                <Button stretched size='m' className={e('save-changes-button')} disabled={privateKeyInputError != null || privateKeyInputValue?.length == 0}>Import Wallet</Button>
+                <Button
+                  stretched
+                  size='m'
+                  className={e('save-changes-button')}
+                  disabled={privateKeyInputError != null || privateKeyInputValue?.length == 0}
+                  onClick={handleSaveNewWallet}
+                >
+                  Import Wallet
+                </Button>
                 <Button stretched mode="gray"
                   onClick={() => {
                     setIsImportPage(false);
