@@ -41,17 +41,17 @@ export const PositionsPage: FC = () => {
   
     return (
       <Page back={false}>
-        <List style={{ paddingTop: '0px' }}>
-          <div style={{ display: 'flex', alignItems: 'center', marginTop: '20px' }}>
+        <List style={{ padding: '0px' }}>
+          <div style={{ display: 'flex', alignItems: 'center', marginLeft: '20px', marginTop: '20px', marginRight: '20px' }}>
             <Title weight="1" style={{ marginRight: 'auto' }}>
               Positions
             </Title>
-          </div>
 
-          <OptionBlock defaultSelected={0}>
-            <div>Open</div>
-            {/* <div>Closed</div> */}
-          </OptionBlock>
+            <OptionBlock defaultSelected={0}>
+              <div>Open</div>
+              {/* <div>Closed</div> */}
+            </OptionBlock>
+          </div>
 
           {isLoading ? (
             <List style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '100%' }}>
@@ -64,7 +64,7 @@ export const PositionsPage: FC = () => {
               <Link key={pos.token_info.address} to={`/token/${pos.token_info.address}`}>
                 <Cell
                   after={
-                    <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'flex-end' }}>
+                    <div style={{ display: 'flex', flexDirection: 'column', color: '#fff', alignItems: 'flex-end' }}>
                       ${pos.token_info.total_usd_price ?? " ––"}
                     </div>
                   }
