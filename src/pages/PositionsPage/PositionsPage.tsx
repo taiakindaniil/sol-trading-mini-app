@@ -15,6 +15,7 @@ import { useApi } from '@/api';
 import { OpenPositionResponse } from '@/api/services/userService';
 //   const [, e] = bem('wallet-page');
 import { OptionBlock } from '@/components/OptionBlock/OptionBlock';
+import { WalletAddress } from '@/components/WalletAddress/WalletAddress';
   
 export const PositionsPage: FC = () => {
     // const initDataState = useSignal(_initDataState);
@@ -63,6 +64,9 @@ export const PositionsPage: FC = () => {
             positions?.data.map((pos) => (
               <Link key={pos.token_info.address} to={`/token/${pos.token_info.address}`}>
                 <Cell
+                  subtitle={
+                    <WalletAddress address={pos.token_info.address} slice={10} />
+                  }
                   after={
                     <div style={{ display: 'flex', flexDirection: 'column', color: '#fff', alignItems: 'flex-end' }}>
                       ${pos.token_info.total_usd_price ?? " ––"}
