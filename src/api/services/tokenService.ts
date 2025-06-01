@@ -127,11 +127,6 @@ class TokenService {
     const { data } = await apiClient.get<TokenTxHistoryResponse>(`/token/${tokenAddress}/transactions`);
     return data;
   }
-
-  async getPositions(): Promise<PositionsResponse> {
-    const { data } = await apiClient.get<PositionsResponse>(`/my/positions`);
-    return data;
-  }
 }
 
 export const tokenService = new TokenService();

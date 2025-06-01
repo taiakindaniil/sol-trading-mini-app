@@ -37,6 +37,19 @@ const tabs = [
     )
   },
   {
+    id: 'positions',
+    text: 'Positions',
+    path: '/positions',
+    icon: (
+      <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <rect x="3" y="13" width="3" height="8" rx="1" fill="currentColor"/>
+        <rect x="8" y="9" width="3" height="12" rx="1" fill="currentColor"/>
+        <rect x="13" y="5" width="3" height="16" rx="1" fill="currentColor"/>
+        <rect x="18" y="2" width="3" height="19" rx="1" fill="currentColor"/>
+      </svg>
+    )
+  },
+  {
     id: 'referral',
     text: 'Referral',
     path: '/referral',

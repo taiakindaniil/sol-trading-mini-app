@@ -6,6 +6,7 @@ import { TokenPage } from '@/pages/TokenPage/TokenPage';
 import { ReferralPage } from '@/pages/ReferralPage/ReferralPage';
 import { WithdrawPage } from '@/pages/WithdrawPage/WithdrawPage';
 import { SearchPage } from '@/pages/SearchPage/SearchPage';
+import { PositionsPage } from '@/pages/PositionsPage/PositionsPage';
 
 interface Route {
   path: string;
@@ -22,6 +23,7 @@ export const routes: Route[] = [
   { path: '/referral', Component: ReferralPage, title: 'Referral' },
   { path: '/withdraw', Component: WithdrawPage, title: 'Withdraw' },
   { path: '/search', Component: SearchPage, title: 'Search' },
+  { path: '/positions', Component: PositionsPage, title: 'Positions' },
   {
     path: '/wallet',
     Component: WalletPage,

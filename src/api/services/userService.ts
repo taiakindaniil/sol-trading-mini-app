@@ -38,6 +38,26 @@ export interface ReferralResponse {
   detail?: string;
 }
 
+export interface OpenPositionResponse {
+  data: {
+    metadata: {
+      description: string;
+      name: string;
+      symbol: string;
+      token_standard: string;
+    };
+    token_info: {
+      address: string;
+      decimals: number;
+      total_usd_price?: number;
+    };
+    balance: number;
+  }[];
+  success: boolean;
+  message?: string; 
+  detail?: string;
+}
+
 /**
  * Service for handling user-related API calls
  */
@@ -81,21 +101,16 @@ class UserService {
   }
 
   /**
-   * Link a new wallet to the user's account
-   * @param walletAddress - Wallet address to link
-   * @returns Promise with success status
-   */
-  async linkWallet(walletAddress: string): Promise<{ success: boolean; message: string }> {
-    const { data } = await apiClient.post('/user/wallets/link', { walletAddress });
-    return data;
-  }
-
-  /**
    * Get referral data for the current user
    * @returns Promise with referral data
    */
   async getReferralData(): Promise<ReferralResponse> {
     const { data } = await apiClient.get<ReferralResponse>('/my/referral');
+    return data;
+  }
+
+  async getOpenPositions(): Promise<OpenPositionResponse> {
+    const { data } = await apiClient.get<OpenPositionResponse>('/my/positions/open');
     return data;
   }
 }
