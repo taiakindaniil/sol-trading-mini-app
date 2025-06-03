@@ -37,14 +37,12 @@ export const IndexPage: FC = () => {
         const volumeA = a.metrics?.volume?.[timeframes[index]] ?? 0;
         const volumeB = b.metrics?.volume?.[timeframes[index]] ?? 0;
         
-        // If volumes are equal, sort by market cap
-        if (volumeA === volumeB) {
-          const marketCapA = a.metrics?.market_cap ?? 0;
-          const marketCapB = b.metrics?.market_cap ?? 0;
-          return marketCapB - marketCapA;
-        }
+        // If one volume is zero, put it at the bottom
+        if (volumeA === 0) return 1;
+        if (volumeB === 0) return -1;
         
-        return volumeB - volumeA; // Sort in descending order
+        // Otherwise sort by volume
+        return volumeB - volumeA;
       });
     });
   };
@@ -57,14 +55,12 @@ export const IndexPage: FC = () => {
         const volumeA = a.metrics?.volume?.[selectedTimeframe] ?? 0;
         const volumeB = b.metrics?.volume?.[selectedTimeframe] ?? 0;
         
-        // If volumes are equal, sort by market cap
-        if (volumeA === volumeB) {
-          const marketCapA = a.metrics?.market_cap ?? 0;
-          const marketCapB = b.metrics?.market_cap ?? 0;
-          return marketCapB - marketCapA;
-        }
+        // If one volume is zero, put it at the bottom
+        if (volumeA === 0) return 1;
+        if (volumeB === 0) return -1;
         
-        return volumeB - volumeA; // Sort in descending order
+        // Otherwise sort by volume
+        return volumeB - volumeA;
       });
       setLoadedTokens(sortedTokens);
       setError(null);
