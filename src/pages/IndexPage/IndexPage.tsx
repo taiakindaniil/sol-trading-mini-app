@@ -36,6 +36,14 @@ export const IndexPage: FC = () => {
       return Array.from(uniqueTokens.values()).sort((a, b) => {
         const volumeA = a.metrics?.volume?.[timeframes[index]] ?? 0;
         const volumeB = b.metrics?.volume?.[timeframes[index]] ?? 0;
+        
+        // If volumes are equal, sort by market cap
+        if (volumeA === volumeB) {
+          const marketCapA = a.metrics?.market_cap ?? 0;
+          const marketCapB = b.metrics?.market_cap ?? 0;
+          return marketCapB - marketCapA;
+        }
+        
         return volumeB - volumeA; // Sort in descending order
       });
     });
@@ -48,6 +56,14 @@ export const IndexPage: FC = () => {
       const sortedTokens = response.data.sort((a, b) => {
         const volumeA = a.metrics?.volume?.[selectedTimeframe] ?? 0;
         const volumeB = b.metrics?.volume?.[selectedTimeframe] ?? 0;
+        
+        // If volumes are equal, sort by market cap
+        if (volumeA === volumeB) {
+          const marketCapA = a.metrics?.market_cap ?? 0;
+          const marketCapB = b.metrics?.market_cap ?? 0;
+          return marketCapB - marketCapA;
+        }
+        
         return volumeB - volumeA; // Sort in descending order
       });
       setLoadedTokens(sortedTokens);
