@@ -26,8 +26,14 @@ export const IndexPage: FC = () => {
     setSelectedTimeframe(timeframes[index]);
     // Sort existing tokens by volume for the new timeframe
     setLoadedTokens(prevTokens => {
-      // Create a new array to prevent duplication
-      return [...prevTokens].sort((a, b) => {
+      // Create a map to ensure uniqueness by token address
+      const uniqueTokens = new Map();
+      prevTokens.forEach(token => {
+        uniqueTokens.set(token.token.address, token);
+      });
+      
+      // Convert map back to array and sort
+      return Array.from(uniqueTokens.values()).sort((a, b) => {
         const volumeA = a.metrics?.volume?.[timeframes[index]] ?? 0;
         const volumeB = b.metrics?.volume?.[timeframes[index]] ?? 0;
         return volumeB - volumeA; // Sort in descending order
