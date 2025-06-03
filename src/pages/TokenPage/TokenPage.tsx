@@ -146,7 +146,7 @@ export const TokenPage: FC = () => {
             id: prevHistory.length + 1,
             token_id: 0,
             tx_type: "failed",
-            error_type: 'insufficient_balance',
+            error_type: data.error_type || "",
             wallet_address: "",
             amount_sol: 0,
             amount_tokens: 0,

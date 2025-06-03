@@ -26,7 +26,7 @@ export const IndexPage: FC = () => {
     setSelectedTimeframe(timeframes[index]);
     // Sort existing tokens by volume for the new timeframe
     setLoadedTokens(prevTokens => {
-      const sortedTokens = [...prevTokens].sort((a, b) => {
+      const sortedTokens = prevTokens.sort((a, b) => {
         const volumeA = a.metrics?.volume?.[timeframes[index]] ?? 0;
         const volumeB = b.metrics?.volume?.[timeframes[index]] ?? 0;
         return volumeB - volumeA; // Sort in descending order
