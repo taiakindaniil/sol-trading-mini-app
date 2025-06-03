@@ -120,6 +120,10 @@ export const IndexPage: FC = () => {
                           ? (tokenInfo.metrics?.txns?.h1?.buys ?? 0) + (tokenInfo.metrics?.txns?.h1?.sells ?? 0)
                           : (tokenInfo.metrics?.txns?.h24?.buys ?? 0) + (tokenInfo.metrics?.txns?.h24?.sells ?? 0)
                       )} txns
+
+                      {' '}•{' '}
+
+                      ${formatMarketCap(tokenInfo.metrics?.volume?.[selectedTimeframe] ?? 0)} vol
                     </Text>
                   </>
                 }
