@@ -83,7 +83,7 @@ export const PositionsPage: FC = () => {
                 after={
                   <div style={{ display: 'flex', flexDirection: 'column', color: '#fff', alignItems: 'flex-end' }}>
                     <Text style={{ color: '#fff' }}>
-                      {pos.current_value_sol?.toFixed(2) ?? "—"} SOL
+                      {pos.current_value_sol?.toFixed(5) ?? "—"} SOL
                     </Text>
                   </div>
                 }
