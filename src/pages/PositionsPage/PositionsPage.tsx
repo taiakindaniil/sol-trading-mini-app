@@ -4,6 +4,7 @@ import {
     Title,
     Cell,
     Spinner,
+    Image,
 } from '@telegram-apps/telegram-ui';
   
 import { FC, useState, useEffect } from 'react';
@@ -93,6 +94,11 @@ export const PositionsPage: FC = () => {
         return closedPositions.data.map((pos) => (
           <Link key={pos.token.address} to={`/token/${pos.token.address}`}>
             <Cell
+              before={
+                <div style={{ position: 'relative' }}>
+                  <Image src={pos.token.image_uri} style={{ backgroundColor: '#000', borderRadius: '100%' }}/>
+                </div>
+              }
               subtitle={
                 <WalletAddress address={pos.token.address} slice={10} />
               }
