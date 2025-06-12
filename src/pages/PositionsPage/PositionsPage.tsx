@@ -54,6 +54,13 @@ export const PositionsPage: FC = () => {
       fetchClosedPositionsData();
     }, [api]);
 
+    const calculateTotalPnL = (pos: OpenPositionResponse['data'][0]) => {
+      const totalValue = pos.current_value_sol + pos.sell_amount_sol;
+      const totalPnL = totalValue - pos.buy_amount_sol;
+      const pnlPercentage = (totalPnL / pos.buy_amount_sol) * 100;
+      return { totalPnL, pnlPercentage };
+    };
+
     const renderPositionList = () => {
       if (isLoading) {
         return (
@@ -68,33 +75,35 @@ export const PositionsPage: FC = () => {
           return <Cell>No open positions available</Cell>;
         }
 
-        return positions.data.map((pos) => (
-          <Link key={pos.token.address} to={`/token/${pos.token.address}`}>
-            <Cell
-              before={
-                <div style={{ position: 'relative' }}>
-                  <Image src={pos.token.image_uri} style={{ backgroundColor: '#000', borderRadius: '100%' }}/>
-                </div>
-              }
-              subtitle={
-                <WalletAddress address={pos.token.address} slice={5} />
-              }
-              after={
-                <div style={{ display: 'flex', flexDirection: 'column', color: '#fff', alignItems: 'flex-end' }}>
-                  <Text style={{ color: pos.current_value_sol >= pos.buy_amount_sol ? '#4CAF50' : '#FF5252' }}>
-                    {pos.current_value_sol >= pos.buy_amount_sol ? '+' : ''}
-                    {((pos.current_value_sol - pos.buy_amount_sol) / pos.buy_amount_sol * 100).toFixed(1)}%
-                  </Text>
-                  <Text style={{ color: '#fff' }}>
-                    {pos.current_value_sol.toFixed(2)} SOL
-                  </Text>
-                </div>
-              }
-            >
-              <Text style={{ color: '#fff' }} weight='2'>{pos.token.symbol}</Text>
-            </Cell>
-          </Link>
-        ));
+        return positions.data.map((pos) => {
+          const { totalPnL, pnlPercentage } = calculateTotalPnL(pos);
+          return (
+            <Link key={pos.token.address} to={`/token/${pos.token.address}`}>
+              <Cell
+                before={
+                  <div style={{ position: 'relative' }}>
+                    <Image src={pos.token.image_uri} style={{ backgroundColor: '#000', borderRadius: '100%' }}/>
+                  </div>
+                }
+                subtitle={
+                  <WalletAddress address={pos.token.address} slice={5} />
+                }
+                after={
+                  <div style={{ display: 'flex', flexDirection: 'column', color: '#fff', alignItems: 'flex-end' }}>
+                    <Text style={{ color: totalPnL >= 0 ? '#4CAF50' : '#FF5252' }}>
+                      {totalPnL >= 0 ? '+' : ''}{pnlPercentage.toFixed(1)}%
+                    </Text>
+                    <Text style={{ color: '#fff' }}>
+                      {totalPnL.toFixed(2)} SOL
+                    </Text>
+                  </div>
+                }
+              >
+                <Text style={{ color: '#fff' }} weight='2'>{pos.token.symbol}</Text>
+              </Cell>
+            </Link>
+          );
+        });
       } else {
         if (!closedPositions?.data.length) {
           return <Cell>No closed positions available</Cell>;
