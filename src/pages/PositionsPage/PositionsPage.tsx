@@ -54,13 +54,6 @@ export const PositionsPage: FC = () => {
       fetchClosedPositionsData();
     }, [api]);
 
-    const calculateTotalPnL = (pos: OpenPositionResponse['data'][0]) => {
-      const totalValue = pos.current_value_sol + pos.sell_amount_sol;
-      const totalPnL = totalValue - pos.buy_amount_sol;
-      const pnlPercentage = (totalPnL / pos.buy_amount_sol) * 100;
-      return { totalPnL, pnlPercentage };
-    };
-
     const renderPositionList = () => {
       if (isLoading) {
         return (
@@ -76,7 +69,6 @@ export const PositionsPage: FC = () => {
         }
 
         return positions.data.map((pos) => {
-          const { totalPnL, pnlPercentage } = calculateTotalPnL(pos);
           return (
             <Link key={pos.token.address} to={`/token/${pos.token.address}`}>
               <Cell
@@ -90,11 +82,8 @@ export const PositionsPage: FC = () => {
                 }
                 after={
                   <div style={{ display: 'flex', flexDirection: 'column', color: '#fff', alignItems: 'flex-end' }}>
-                    <Text style={{ color: totalPnL >= 0 ? '#4CAF50' : '#FF5252' }}>
-                      {totalPnL >= 0 ? '+' : ''}{pnlPercentage.toFixed(1)}%
-                    </Text>
                     <Text style={{ color: '#fff' }}>
-                      {totalPnL.toFixed(2)} SOL
+                      {pos.current_value_sol.toFixed(2)} SOL
                     </Text>
                   </div>
                 }
