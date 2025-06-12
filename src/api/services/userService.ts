@@ -41,21 +41,16 @@ export interface ReferralResponse {
 
 export interface OpenPositionResponse {
   data: {
-    metadata: {
-      description: string;
-      name: string;
-      symbol: string;
-      token_standard: string;
-    };
-    token_info: {
-      address: string;
-      decimals: number;
-      total_usd_price?: number;
-    };
-    balance: number;
+    token: TokenData;
+    buy_amount_sol: number;
+    sell_amount_sol: number;
+    remaining_tokens: number;
+    current_price_sol: number;
+    current_value_sol: number;
+    price_source: string;
   }[];
   success: boolean;
-  message?: string; 
+  message?: string;
   detail?: string;
 }
 
