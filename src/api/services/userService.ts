@@ -1,4 +1,5 @@
 import apiClient from '../apiClient';
+import { TokenData } from './tokenService';
 
 export interface UserProfile {
   id: string;
@@ -58,6 +59,20 @@ export interface OpenPositionResponse {
   detail?: string;
 }
 
+export interface ClosedPositionsResponse {
+  data: {
+    token: TokenData;
+    buy_amount_sol: number;
+    sell_amount_sol: number;
+    pnl_sol: number;
+    pnl_percentage: number;
+    remaining_tokens: number;
+  }[];
+  success: boolean;
+  message?: string;
+  detail?: string;
+}
+
 /**
  * Service for handling user-related API calls
  */
@@ -111,6 +126,11 @@ class UserService {
 
   async getOpenPositions(): Promise<OpenPositionResponse> {
     const { data } = await apiClient.get<OpenPositionResponse>('/my/positions/open');
+    return data;
+  }
+
+  async getClosedPositions(): Promise<ClosedPositionsResponse> {
+    const { data } = await apiClient.get<ClosedPositionsResponse>('/my/positions/closed');
     return data;
   }
 }

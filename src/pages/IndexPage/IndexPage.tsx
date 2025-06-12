@@ -23,9 +23,7 @@ export const IndexPage: FC = () => {
   const [selectedTimeframe, setSelectedTimeframe] = useState<Timeframe>('m5');
 
   const handleTimeframeChange = (index: number) => {
-
-    console.log(timeframes[index], selectedTimeframe);
-
+    
     setSelectedTimeframe(timeframes[index]);
     // Sort existing tokens by volume for the new timeframe
     setLoadedTokens(prevTokens => {
