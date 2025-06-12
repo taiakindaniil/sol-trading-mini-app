@@ -72,7 +72,7 @@ export const PositionsPage: FC = () => {
           <Link key={pos.token_info.address} to={`/token/${pos.token_info.address}`}>
             <Cell
               subtitle={
-                <WalletAddress address={pos.token_info.address} slice={10} />
+                <WalletAddress address={pos.token_info.address} slice={5} />
               }
               after={
                 <div style={{ display: 'flex', flexDirection: 'column', color: '#fff', alignItems: 'flex-end' }}>
@@ -100,15 +100,15 @@ export const PositionsPage: FC = () => {
                 </div>
               }
               subtitle={
-                <WalletAddress address={pos.token.address} slice={10} />
+                <WalletAddress address={pos.token.address} slice={5} />
               }
               after={
                 <div style={{ display: 'flex', flexDirection: 'column', color: '#fff', alignItems: 'flex-end' }}>
                   <Text style={{ color: pos.pnl_percentage >= 0 ? '#4CAF50' : '#FF5252' }}>
-                    {pos.pnl_percentage >= 0 ? '+' : ''}{pos.pnl_percentage.toFixed(2)}%
+                    {pos.pnl_percentage >= 0 ? '+' : ''}{pos.pnl_percentage.toFixed(1)}%
                   </Text>
                   <Text style={{ color: '#fff' }}>
-                    {pos.pnl_sol.toFixed(4)} SOL
+                    {pos.pnl_sol.toFixed(2)} SOL
                   </Text>
                 </div>
               }
