@@ -14,7 +14,7 @@ export const PriceChart: FC<PriceChartProps> = ({ tokenAddress, initialPrice = 0
   const [chartReady, setChartReady] = useState(false);
   const [currentPrice, setCurrentPrice] = useState<number>(initialPrice);
   const [debugInfo, setDebugInfo] = useState<string>('Initializing...');
-  const lineSeries = useRef<LineSeries>(null);
+  const [lineSeries, setLineSeries] = useState<any>(null);
 
   useEffect(() => {
     if (!chartContainerRef.current) {
@@ -54,7 +54,7 @@ export const PriceChart: FC<PriceChartProps> = ({ tokenAddress, initialPrice = 0
 
       setDebugInfo('Chart created successfully');
 
-      lineSeries.current = chart.addSeries(LineSeries);
+      setLineSeries(chart.addSeries(LineSeries));
 
       // Add sample data
       const now = Math.floor(Date.now() / 1000);
@@ -66,7 +66,7 @@ export const PriceChart: FC<PriceChartProps> = ({ tokenAddress, initialPrice = 0
         { time: now as UTCTimestamp, value: 0.0016 },
       ];
 
-      lineSeries.current.setData(sampleData);
+      lineSeries.setData(sampleData);
       setCurrentPrice(0.0016);
       setChartReady(true);
       setDebugInfo('Chart data set, should be visible');
@@ -102,7 +102,7 @@ export const PriceChart: FC<PriceChartProps> = ({ tokenAddress, initialPrice = 0
         setCurrentPrice(newPrice);
         setDebugInfo(`Price updated: ${newPrice}`);
 
-        lineSeries.current.update({
+        lineSeries.update({
           value: newPrice
         });
       }
