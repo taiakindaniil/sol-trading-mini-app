@@ -65,6 +65,12 @@ export const PriceChart: FC<PriceChartProps> = ({ tokenAddress, initialPrice = 0
           timeVisible: true,
           secondsVisible: true,
         },
+        localization: {
+          timeFormatter: (time: UTCTimestamp) => {
+            const date = new Date(time * 1000);
+            return date.toLocaleTimeString();
+          },
+        },
       });
 
       setDebugInfo('Chart created successfully');
