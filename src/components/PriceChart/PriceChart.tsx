@@ -60,9 +60,11 @@ export const PriceChart: FC<PriceChartProps> = ({ tokenAddress, initialPrice = 0
         // rightPriceScale: {
         //   borderColor: '#485c7b',
         // },
-        // timeScale: {
-        //   borderColor: '#485c7b',
-        // },
+        timeScale: {
+          borderColor: '#485c7b',
+          timeVisible: true,
+          secondsVisible: true,
+        },
       });
 
       setDebugInfo('Chart created successfully');
