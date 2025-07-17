@@ -20,6 +20,7 @@ import { useParams } from 'react-router-dom';
 import { Page } from '@/components/Page';
 import { WalletAddress } from '@/components/WalletAddress/WalletAddress';
 import { BuySellButtons } from '@/components/BuySellButtons/BuySellButtons';
+import { PriceChart } from '@/components/PriceChart/PriceChart';
 // import { bem } from '@/css/bem';
 import { useApi } from '@/api';
 
@@ -331,26 +332,11 @@ export const TokenPage: FC = () => {
             </div>
           )}
           
-          {tokenData ? (
-            tokenData.pool?.address ? (
-              <iframe
-                id="dextools-widget"
-                title="DEXTools Trading Chart"
-                width="100%"
-                height="270"
-                style={{ border: 'none', borderRadius: '10px' }}
-                src={`https://www.dextools.io/widget-chart/en/solana/pe-light/${tokenData.pool.address}?theme=dark&chartType=1&chartResolution=1&drawingToolbars=false`}
-              />
-            ) : (
-              <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '270px' }}>
-                <Text>Cannot show chart for this token</Text>
-              </div>
-            )
-          ) : (
-            <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '270px' }}>
-              <Text>Loading chart...</Text>
-            </div>
-          )}
+          <PriceChart 
+            tokenAddress={tokenAddress || ""} 
+            initialPrice={tokenData?.metrics?.price_sol ? parseFloat(tokenData.metrics.price_sol.toString()) : 0}
+            height={270}
+          />
 
           <Text style={{fontSize: '12px', fontWeight: 'bold', marginLeft: '8px'}}>MARKET</Text>
           <div style={{display: 'flex', flexDirection: 'row', gap: '8px'}}>
