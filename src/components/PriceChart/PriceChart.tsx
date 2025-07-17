@@ -82,7 +82,7 @@ export const PriceChart: FC<PriceChartProps> = ({ tokenAddress, initialPrice = 0
         { time: now as UTCTimestamp, value: 0.0016 },
       ];
 
-      lineSeriesRef.current.setData(sampleData);
+      // lineSeriesRef.current.setData(sampleData);
       setCurrentPrice(0.0016);
       setChartReady(true);
       setDebugInfo('Chart data set, should be visible');
