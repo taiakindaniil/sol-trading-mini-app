@@ -124,13 +124,16 @@ export const PriceChart: FC<PriceChartProps> = ({ tokenAddress, initialPrice = 0
     const handlePriceUpdate = (data: any) => {
       if (data.token_address === tokenAddress && data.metrics?.token_price_sol && lineSeriesRef.current) {
         const newPrice = parseFloat(data.metrics.token_price_sol);
+
+        if (currentPrice != newPrice) {
+          lineSeriesRef.current.update({
+            time: Math.floor(new Date(data.metrics.timestamp).getTime() / 1000) as UTCTimestamp,
+            value: newPrice
+          });
+        }
+
         setCurrentPrice(newPrice);
         setDebugInfo(`Price updated: ${newPrice}`);
-
-        lineSeriesRef.current.update({
-          time: Math.floor(new Date(data.metrics.timestamp).getTime() / 1000) as UTCTimestamp,
-          value: newPrice
-        });
       }
     };
 
