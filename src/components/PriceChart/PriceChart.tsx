@@ -13,8 +13,8 @@ export const PriceChart: FC<PriceChartProps> = ({ tokenAddress, initialPrice = 0
   const chartContainerRef = useRef<HTMLDivElement>(null);
   const [chartReady, setChartReady] = useState(false);
   const [currentPrice, setCurrentPrice] = useState<number>(initialPrice);
-  const [priceChange, _] = useState<number>(0);
   const [debugInfo, setDebugInfo] = useState<string>('Initializing...');
+  const lineSeries = useRef<LineSeries>(null);
 
   useEffect(() => {
     if (!chartContainerRef.current) {
@@ -54,7 +54,7 @@ export const PriceChart: FC<PriceChartProps> = ({ tokenAddress, initialPrice = 0
 
       setDebugInfo('Chart created successfully');
 
-      const lineSeries = chart.addSeries(LineSeries);
+      lineSeries.current = chart.addSeries(LineSeries);
 
       // Add sample data
       const now = Math.floor(Date.now() / 1000);
@@ -66,7 +66,7 @@ export const PriceChart: FC<PriceChartProps> = ({ tokenAddress, initialPrice = 0
         { time: now as UTCTimestamp, value: 0.0016 },
       ];
 
-      lineSeries.setData(sampleData);
+      lineSeries.current.setData(sampleData);
       setCurrentPrice(0.0016);
       setChartReady(true);
       setDebugInfo('Chart data set, should be visible');
@@ -101,6 +101,10 @@ export const PriceChart: FC<PriceChartProps> = ({ tokenAddress, initialPrice = 0
         const newPrice = parseFloat(data.metrics.token_price_sol);
         setCurrentPrice(newPrice);
         setDebugInfo(`Price updated: ${newPrice}`);
+
+        lineSeries.current.update({
+          value: newPrice
+        });
       }
     };
 
@@ -123,11 +127,6 @@ export const PriceChart: FC<PriceChartProps> = ({ tokenAddress, initialPrice = 0
           <Text className="current-price">
             {currentPrice > 0 ? `$${currentPrice.toFixed(8)}` : 'No price data'}
           </Text>
-          {priceChange !== 0 && (
-            <Text className={`price-change ${priceChange >= 0 ? 'positive' : 'negative'}`}>
-              {priceChange >= 0 ? '+' : ''}{priceChange.toFixed(2)}%
-            </Text>
-          )}
         </div>
         <Text style={{ fontSize: '10px', color: '#888' }}>
           {debugInfo}
