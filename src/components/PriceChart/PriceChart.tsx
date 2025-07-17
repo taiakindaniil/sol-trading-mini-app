@@ -37,16 +37,16 @@ export const PriceChart: FC<PriceChartProps> = ({ tokenAddress, initialPrice = 0
           textColor: '#ffffff',
           attributionLogo: false
         },
-        crosshair: {
-          // hide the horizontal crosshair line
-          horzLine: {
-            visible: false,
-          },
-          // hide the vertical crosshair label
-          vertLine: {
-            labelVisible: false,
-          },
-        },
+        // crosshair: {
+        //   // hide the horizontal crosshair line
+        //   horzLine: {
+        //     visible: false,
+        //   },
+        //   // hide the vertical crosshair label
+        //   vertLine: {
+        //     labelVisible: false,
+        //   },
+        // },
         // hide the grid lines
         grid: {
           vertLines: {
@@ -57,10 +57,6 @@ export const PriceChart: FC<PriceChartProps> = ({ tokenAddress, initialPrice = 0
             color: '#2B2B43'
           },
         },
-        // grid: {
-        //   vertLines: { color: '#2B2B43' },
-        //   horzLines: { color: '#2B2B43' },
-        // },
         // rightPriceScale: {
         //   borderColor: '#485c7b',
         // },
