@@ -1,5 +1,5 @@
 import { FC, useEffect, useRef, useState } from 'react';
-import { createChart, IChartApi, UTCTimestamp } from 'lightweight-charts';
+import { createChart, UTCTimestamp } from 'lightweight-charts';
 import { Text } from '@telegram-apps/telegram-ui';
 import './PriceChart.css';
 
@@ -13,7 +13,7 @@ export const PriceChart: FC<PriceChartProps> = ({ tokenAddress, initialPrice = 0
   const chartContainerRef = useRef<HTMLDivElement>(null);
   const [chartReady, setChartReady] = useState(false);
   const [currentPrice, setCurrentPrice] = useState<number>(initialPrice);
-  const [priceChange, setPriceChange] = useState<number>(0);
+  const [priceChange, _] = useState<number>(0);
   const [debugInfo, setDebugInfo] = useState<string>('Initializing...');
 
   useEffect(() => {
