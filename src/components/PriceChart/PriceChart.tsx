@@ -1,5 +1,5 @@
 import { FC, useEffect, useRef, useState } from 'react';
-import { createChart, UTCTimestamp, ISeriesApi, AreaSeries } from 'lightweight-charts';
+import { createChart, ISeriesApi, AreaSeries } from 'lightweight-charts'; // UTCTimestamp
 import { Text } from '@telegram-apps/telegram-ui';
 import './PriceChart.css';
 
@@ -75,14 +75,14 @@ export const PriceChart: FC<PriceChartProps> = ({ tokenAddress, initialPrice = 0
       });
 
       // Add sample data
-      const now = Math.floor(Date.now() / 1000);
-      const sampleData = [
-        { time: (now - 3600) as UTCTimestamp, value: 0.001 },
-        { time: (now - 2700) as UTCTimestamp, value: 0.0015 },
-        { time: (now - 1800) as UTCTimestamp, value: 0.0012 },
-        { time: (now - 900) as UTCTimestamp, value: 0.0018 },
-        { time: now as UTCTimestamp, value: 0.0016 },
-      ];
+      // const now = Math.floor(Date.now() / 1000);
+      // const sampleData = [
+      //   { time: (now - 3600) as UTCTimestamp, value: 0.001 },
+      //   { time: (now - 2700) as UTCTimestamp, value: 0.0015 },
+      //   { time: (now - 1800) as UTCTimestamp, value: 0.0012 },
+      //   { time: (now - 900) as UTCTimestamp, value: 0.0018 },
+      //   { time: now as UTCTimestamp, value: 0.0016 },
+      // ];
 
       // lineSeriesRef.current.setData(sampleData);
       setCurrentPrice(0.0016);
