@@ -1,5 +1,5 @@
 import { FC, useEffect, useRef, useState } from 'react';
-import { createChart, UTCTimestamp } from 'lightweight-charts';
+import { createChart, UTCTimestamp, LineSeries } from 'lightweight-charts';
 import { Text } from '@telegram-apps/telegram-ui';
 import './PriceChart.css';
 
@@ -35,29 +35,26 @@ export const PriceChart: FC<PriceChartProps> = ({ tokenAddress, initialPrice = 0
         layout: {
           background: { color: '#1e1e1e' },
           textColor: '#ffffff',
+          attributionLogo: false
         },
-        grid: {
-          vertLines: { color: '#2B2B43' },
-          horzLines: { color: '#2B2B43' },
-        },
-        crosshair: {
-          mode: 1,
-        },
-        rightPriceScale: {
-          borderColor: '#485c7b',
-        },
-        timeScale: {
-          borderColor: '#485c7b',
-        },
+        // grid: {
+        //   vertLines: { color: '#2B2B43' },
+        //   horzLines: { color: '#2B2B43' },
+        // },
+        // crosshair: {
+        //   mode: 1,
+        // },
+        // rightPriceScale: {
+        //   borderColor: '#485c7b',
+        // },
+        // timeScale: {
+        //   borderColor: '#485c7b',
+        // },
       });
 
       setDebugInfo('Chart created successfully');
 
-                    // Add line series
-       const lineSeries = (chart as any).addLineSeries({
-         color: '#c4f85c',
-         lineWidth: 2,
-       });
+      const lineSeries = chart.addSeries(LineSeries);
 
       // Add sample data
       const now = Math.floor(Date.now() / 1000);
