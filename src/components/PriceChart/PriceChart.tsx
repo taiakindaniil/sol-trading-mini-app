@@ -40,9 +40,7 @@ export const PriceChart: FC<PriceChartProps> = ({ tokenAddress, initialPrice = 0
         crosshair: {
           // hide the horizontal crosshair line
           horzLine: {
-            visible: true,
-            labelVisible: false,
-            color: '#2B2B43'
+            visible: false,
           },
           // hide the vertical crosshair label
           vertLine: {
@@ -55,7 +53,8 @@ export const PriceChart: FC<PriceChartProps> = ({ tokenAddress, initialPrice = 0
             visible: false,
           },
           horzLines: {
-            visible: false,
+            visible: true,
+            color: '#2B2B43'
           },
         },
         // grid: {
