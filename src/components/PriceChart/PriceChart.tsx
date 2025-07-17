@@ -1,5 +1,5 @@
 import { FC, useEffect, useRef, useState } from 'react';
-import { createChart, ISeriesApi, AreaSeries } from 'lightweight-charts'; // UTCTimestamp
+import { createChart, ISeriesApi, AreaSeries, UTCTimestamp } from 'lightweight-charts';
 import { Text } from '@telegram-apps/telegram-ui';
 import './PriceChart.css';
 
@@ -121,7 +121,7 @@ export const PriceChart: FC<PriceChartProps> = ({ tokenAddress, initialPrice = 0
         setDebugInfo(`Price updated: ${newPrice}`);
 
         lineSeriesRef.current.update({
-          time: new Date(data.metrics.timestamp).toDateString(),
+          time: Math.floor(new Date(data.metrics.timestamp).getTime() / 1000) as UTCTimestamp,
           value: newPrice
         });
       }
