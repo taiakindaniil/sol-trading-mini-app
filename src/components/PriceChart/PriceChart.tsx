@@ -1,5 +1,5 @@
 import { FC, useEffect, useRef, useState } from 'react';
-import { createChart, UTCTimestamp, LineSeries } from 'lightweight-charts';
+import { createChart, UTCTimestamp, LineSeries, ISeriesApi } from 'lightweight-charts';
 import { Text } from '@telegram-apps/telegram-ui';
 import './PriceChart.css';
 
@@ -11,10 +11,10 @@ interface PriceChartProps {
 
 export const PriceChart: FC<PriceChartProps> = ({ tokenAddress, initialPrice = 0, height = 270 }) => {
   const chartContainerRef = useRef<HTMLDivElement>(null);
+  const lineSeriesRef = useRef<ISeriesApi<'Line'> | null>(null);
   const [chartReady, setChartReady] = useState(false);
   const [currentPrice, setCurrentPrice] = useState<number>(initialPrice);
   const [debugInfo, setDebugInfo] = useState<string>('Initializing...');
-  const [lineSeries, setLineSeries] = useState<any>(null);
 
   useEffect(() => {
     if (!chartContainerRef.current) {
@@ -54,7 +54,7 @@ export const PriceChart: FC<PriceChartProps> = ({ tokenAddress, initialPrice = 0
 
       setDebugInfo('Chart created successfully');
 
-      setLineSeries(chart.addSeries(LineSeries));
+      lineSeriesRef.current = chart.addSeries(LineSeries);
 
       // Add sample data
       const now = Math.floor(Date.now() / 1000);
@@ -66,7 +66,7 @@ export const PriceChart: FC<PriceChartProps> = ({ tokenAddress, initialPrice = 0
         { time: now as UTCTimestamp, value: 0.0016 },
       ];
 
-      lineSeries.setData(sampleData);
+      lineSeriesRef.current.setData(sampleData);
       setCurrentPrice(0.0016);
       setChartReady(true);
       setDebugInfo('Chart data set, should be visible');
@@ -97,12 +97,13 @@ export const PriceChart: FC<PriceChartProps> = ({ tokenAddress, initialPrice = 0
     let socket: any;
     
     const handlePriceUpdate = (data: any) => {
-      if (data.token_address === tokenAddress && data.metrics?.token_price_sol) {
+      if (data.token_address === tokenAddress && data.metrics?.token_price_sol && lineSeriesRef.current) {
         const newPrice = parseFloat(data.metrics.token_price_sol);
         setCurrentPrice(newPrice);
         setDebugInfo(`Price updated: ${newPrice}`);
 
-        lineSeries.update({
+        lineSeriesRef.current.update({
+          time: data.metrics.timestamp as UTCTimestamp,
           value: newPrice
         });
       }
