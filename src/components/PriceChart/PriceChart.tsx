@@ -119,7 +119,7 @@ export const PriceChart: FC<PriceChartProps> = ({ tokenAddress, initialPrice = 0
         setDebugInfo(`Price updated: ${newPrice}`);
 
         lineSeriesRef.current.update({
-          time: data.metrics.timestamp as UTCTimestamp,
+          time: data.metrics.timestamp,
           value: newPrice
         });
       }
