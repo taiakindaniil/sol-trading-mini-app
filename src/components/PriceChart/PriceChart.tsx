@@ -1,5 +1,5 @@
 import { FC, useEffect, useRef, useState } from 'react';
-import { createChart, UTCTimestamp, LineSeries, ISeriesApi } from 'lightweight-charts';
+import { createChart, UTCTimestamp, ISeriesApi, AreaSeries } from 'lightweight-charts';
 import { Text } from '@telegram-apps/telegram-ui';
 import './PriceChart.css';
 
@@ -11,7 +11,7 @@ interface PriceChartProps {
 
 export const PriceChart: FC<PriceChartProps> = ({ tokenAddress, initialPrice = 0, height = 270 }) => {
   const chartContainerRef = useRef<HTMLDivElement>(null);
-  const lineSeriesRef = useRef<ISeriesApi<'Line'> | null>(null);
+  const lineSeriesRef = useRef<ISeriesApi<'Area'> | null>(null);
   const [chartReady, setChartReady] = useState(false);
   const [currentPrice, setCurrentPrice] = useState<number>(initialPrice);
   const [debugInfo, setDebugInfo] = useState<string>('Initializing...');
@@ -67,7 +67,10 @@ export const PriceChart: FC<PriceChartProps> = ({ tokenAddress, initialPrice = 0
 
       setDebugInfo('Chart created successfully');
 
-      lineSeriesRef.current = chart.addSeries(LineSeries);
+      lineSeriesRef.current = chart.addSeries(AreaSeries, {
+        topColor: '#2962FF',
+        bottomColor: 'rgba(41, 98, 255, 0.28)',
+      });
 
       // Add sample data
       const now = Math.floor(Date.now() / 1000);
