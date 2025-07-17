@@ -33,16 +33,33 @@ export const PriceChart: FC<PriceChartProps> = ({ tokenAddress, initialPrice = 0
         width: Math.max(container.offsetWidth, 400),
         height: Math.max(height - 40, 230),
         layout: {
-          background: { color: '#1e1e1e' },
+          background: { color: 'black' },
           textColor: '#ffffff',
           attributionLogo: false
+        },
+        crosshair: {
+          // hide the horizontal crosshair line
+          horzLine: {
+              visible: false,
+              labelVisible: false,
+          },
+          // hide the vertical crosshair label
+          vertLine: {
+              labelVisible: false,
+          },
+        },
+        // hide the grid lines
+        grid: {
+          vertLines: {
+            visible: false,
+          },
+          horzLines: {
+            visible: false,
+          },
         },
         // grid: {
         //   vertLines: { color: '#2B2B43' },
         //   horzLines: { color: '#2B2B43' },
-        // },
-        // crosshair: {
-        //   mode: 1,
         // },
         // rightPriceScale: {
         //   borderColor: '#485c7b',
