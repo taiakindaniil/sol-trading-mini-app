@@ -104,6 +104,10 @@ export const TokenPage: FC = () => {
       socket.emit('message', {
         "token_address": tokenAddress,
       });
+
+      socket.emit('subscribe_token_metrics', {
+        "token_address": tokenAddress,
+      });
     });
 
     socket.on('disconnect', () => {
