@@ -70,8 +70,9 @@ export const PriceChart: FC<PriceChartProps> = ({ tokenAddress, initialPrice = 0
       setDebugInfo('Chart created successfully');
 
       lineSeriesRef.current = chart.addSeries(AreaSeries, {
-        topColor: '#2962FF',
-        bottomColor: 'rgba(41, 98, 255, 0.28)',
+        topColor: 'rgba(255, 255, 255, 0.5)',
+        bottomColor: 'rgba(255, 255, 255, 0.1)',
+        lineColor: 'rgba(255, 255, 255, 1)',
       });
 
       // Add sample data
