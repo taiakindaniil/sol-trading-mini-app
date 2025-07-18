@@ -13,7 +13,6 @@
   padding: 16px 16px;
   background-color: #1e1e1e;
   border-radius: 16px;
-  /* border: 1px solid var(--tg-theme-border-color, #e0e0e0); */
 }
 
 .audit-column {
@@ -26,7 +25,7 @@
 .audit-label {
   font-size: 14px;
   font-weight: 500;
-  color: var(--tg-theme-text-color, #fff);
+  color: #fff;
   text-align: center;
 }
 
@@ -35,12 +34,4 @@
   font-weight: 700;
   text-transform: uppercase;
   letter-spacing: 0.5px;
-}
-
-.audit-status.enabled {
-  /* green color will be applied via inline style */
-}
-
-.audit-status.disabled {
-  /* red color will be applied via inline style */
 }
