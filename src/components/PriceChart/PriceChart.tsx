@@ -1,6 +1,7 @@
 import { FC, useEffect, useRef, useState } from 'react';
 import { createChart, ISeriesApi, AreaSeries, UTCTimestamp } from 'lightweight-charts';
 import { Text } from '@telegram-apps/telegram-ui';
+import { formatMarketCap } from '@/helpers/formatters';
 import './PriceChart.css';
 
 interface PriceChartProps {
@@ -58,9 +59,9 @@ export const PriceChart: FC<PriceChartProps> = ({ tokenAddress, tokenSupply, ini
             color: '#2B2B43'
           },
         },
-        // rightPriceScale: {
-        //   borderColor: '#485c7b',
-        // },
+        rightPriceScale: {
+          borderColor: '#485c7b',
+        },
         timeScale: {
           borderColor: '#485c7b',
           timeVisible: true,
@@ -70,6 +71,9 @@ export const PriceChart: FC<PriceChartProps> = ({ tokenAddress, tokenSupply, ini
           timeFormatter: (time: UTCTimestamp) => {
             const date = new Date(time * 1000);
             return date.toLocaleTimeString();
+          },
+          priceFormatter: (price: number) => {
+            return `${formatMarketCap(price)}`;
           },
         },
       });
