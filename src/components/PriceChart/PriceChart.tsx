@@ -171,8 +171,6 @@ export const PriceChart: FC<PriceChartProps> = ({ tokenAddress, tokenSupply, ini
         style={{ 
           height: height,
           width: '100%',
-          backgroundColor: '#1e1e1e',
-          border: '1px solid #333'
         }}
       />
       {!chartReady && (

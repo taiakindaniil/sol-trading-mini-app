@@ -27,26 +27,13 @@
   color: #ffffff;
 }
 
-.price-change {
-  font-size: 14px;
-  font-weight: 600;
-}
-
-.price-change.positive {
-  color: #c4f85c;
-}
-
-.price-change.negative {
-  color: #ff7373;
-}
-
 .price-chart {
-  width: 100%;
+  /* width: 100%;
   background: transparent;
   position: relative;
   border: 1px solid rgba(255, 255, 255, 0.1);
   border-top: none;
-  border-radius: 0 0 10px 10px;
+  border-radius: 0 0 10px 10px; */
 }
 
 .price-chart-loading {
