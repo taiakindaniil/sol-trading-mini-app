@@ -1,8 +1,7 @@
 import { FC } from 'react';
 import './Audit.css';
-import { Modal } from '@telegram-apps/telegram-ui';
+import { Modal, IconButton } from '@telegram-apps/telegram-ui';
 import { ModalHeader } from '@telegram-apps/telegram-ui/dist/components/Overlays/Modal/components/ModalHeader/ModalHeader';
-import { InlineButtonsItem } from '@telegram-apps/telegram-ui/dist/components/Blocks/InlineButtons/components/InlineButtonsItem/InlineButtonsItem';
 
 interface AuditProps {
 //   tokenAddress: string;
@@ -33,14 +32,15 @@ export const Audit: FC<AuditProps> = ({ mintAuthority, freezeAuthority, buttonSt
     <Modal
         header={<ModalHeader>Audit</ModalHeader>}
         trigger={
-        <InlineButtonsItem 
+        <IconButton 
             style={buttonStyle}
             className={buttonClassName}
+            mode="gray"
         >
             <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none">
             <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z" stroke={getShieldColor()} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
             </svg>
-        </InlineButtonsItem>
+        </IconButton>
                 }
         style={{zIndex: 1000}}
     >

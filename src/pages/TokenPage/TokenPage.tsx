@@ -346,7 +346,7 @@ export const TokenPage: FC = () => {
             </div>
           )}
 
-          <Audit buttonStyle={{position: 'absolute', marginTop: '20px', left: '10px'}} mintAuthority={tokenData?.token.mint_authority ?? null} freezeAuthority={tokenData?.token.freeze_authority ?? null} />
+          <Audit buttonStyle={{position: 'relative', marginBottom: '-40px'}} mintAuthority={tokenData?.token.mint_authority ?? null} freezeAuthority={tokenData?.token.freeze_authority ?? null} />
           
           <PriceChart 
             tokenAddress={tokenAddress || ""} 
