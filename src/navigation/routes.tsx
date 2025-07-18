@@ -17,9 +17,6 @@ interface Route {
 
 export const routes: Route[] = [
   { path: '/', Component: IndexPage },
-  // { path: '/init-data', Component: InitDataPage, title: 'Init Data' },
-  // { path: '/theme-params', Component: ThemeParamsPage, title: 'Theme Params' },
-  // { path: '/launch-params', Component: LaunchParamsPage, title: 'Launch Params' },
   { path: '/referral', Component: ReferralPage, title: 'Referral' },
   { path: '/withdraw', Component: WithdrawPage, title: 'Withdraw' },
   { path: '/search', Component: SearchPage, title: 'Search' },
