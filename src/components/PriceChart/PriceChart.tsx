@@ -5,11 +5,12 @@ import './PriceChart.css';
 
 interface PriceChartProps {
   tokenAddress: string;
+  tokenSupply: number;
   initialPrice?: number;
   height?: number;
 }
 
-export const PriceChart: FC<PriceChartProps> = ({ tokenAddress, initialPrice = 0, height = 270 }) => {
+export const PriceChart: FC<PriceChartProps> = ({ tokenAddress, tokenSupply, initialPrice = 0, height = 270 }) => {
   const chartContainerRef = useRef<HTMLDivElement>(null);
   const lineSeriesRef = useRef<ISeriesApi<'Area'> | null>(null);
   const [chartReady, setChartReady] = useState(false);
@@ -128,7 +129,7 @@ export const PriceChart: FC<PriceChartProps> = ({ tokenAddress, initialPrice = 0
         if (currentPrice != newPrice) {
           lineSeriesRef.current.update({
             time: Math.floor(new Date(data.metrics.timestamp).getTime() / 1000) as UTCTimestamp,
-            value: newPrice
+            value: newPrice * tokenSupply
           });
         }
 

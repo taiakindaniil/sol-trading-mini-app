@@ -6,6 +6,7 @@ export interface TokenData {
   name: string;
   symbol: string;
   decimals: number | null;
+  max_supply: number | null;
   image_uri: string;
   status: string;
   tx_hash: string;

@@ -334,6 +334,7 @@ export const TokenPage: FC = () => {
           
           <PriceChart 
             tokenAddress={tokenAddress || ""} 
+            tokenSupply={tokenData?.token.max_supply ?? 1^6}
             initialPrice={tokenData?.metrics?.price_sol ? parseFloat(tokenData.metrics.price_sol.toString()) : 0}
             height={270}
           />
