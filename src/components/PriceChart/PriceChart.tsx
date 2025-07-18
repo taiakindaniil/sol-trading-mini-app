@@ -93,7 +93,7 @@ export const PriceChart: FC<PriceChartProps> = ({ tokenAddress, tokenSupply, ini
         topColor: 'rgba(255, 255, 255, 0.5)',
         bottomColor: 'rgba(255, 255, 255, 0.1)',
         lineColor: 'rgba(255, 255, 255, 1)',
-        lineWidth: 1,
+        lineWidth: 2,
       });
 
       // Add sample data
