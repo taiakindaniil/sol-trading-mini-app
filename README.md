@@ -85,8 +85,6 @@ To view the application, you need to open the `Local`
 link (`https://localhost:5173/reactjs-template` in this example) in your
 browser:
 
-![Application](assets/application.png)
-
 It is important to note that some libraries in this template, such as
 `@telegram-apps/sdk`, are not intended for use outside of Telegram.
 
