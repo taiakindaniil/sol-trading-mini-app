@@ -83,16 +83,16 @@ export const PriceChart: FC<PriceChartProps> = ({ tokenAddress, tokenSupply, ini
       });
 
       // Add sample data
-      // const now = Math.floor(Date.now() / 1000);
-      // const sampleData = [
-      //   { time: (now - 3600) as UTCTimestamp, value: 0.001 },
-      //   { time: (now - 2700) as UTCTimestamp, value: 0.0015 },
-      //   { time: (now - 1800) as UTCTimestamp, value: 0.0012 },
-      //   { time: (now - 900) as UTCTimestamp, value: 0.0018 },
-      //   { time: now as UTCTimestamp, value: 0.0016 },
-      // ];
+      const now = Math.floor(Date.now() / 1000);
+      const sampleData = [
+        { time: (now - 3600) as UTCTimestamp, value: 0.001 * tokenSupply },
+        { time: (now - 2700) as UTCTimestamp, value: 0.0015 * tokenSupply },
+        { time: (now - 1800) as UTCTimestamp, value: 0.0012 * tokenSupply },
+        { time: (now - 900) as UTCTimestamp, value: 0.0018 * tokenSupply },
+        { time: now as UTCTimestamp, value: 0.0016 * tokenSupply },
+      ];
 
-      // lineSeriesRef.current.setData(sampleData);
+      lineSeriesRef.current.setData(sampleData);
       setCurrentPrice(0.0016);
       setChartReady(true);
       setDebugInfo('Chart data set, should be visible');
@@ -129,7 +129,7 @@ export const PriceChart: FC<PriceChartProps> = ({ tokenAddress, tokenSupply, ini
         if (currentPrice != newPrice) {
           lineSeriesRef.current.update({
             time: Math.floor(new Date(data.metrics.timestamp).getTime() / 1000) as UTCTimestamp,
-            value: newPrice * tokenSupply
+            value: (newPrice * tokenSupply)
           });
         }
 
