@@ -158,7 +158,7 @@ export const PriceChart: FC<PriceChartProps> = ({ tokenAddress, tokenSupply, ini
         socket.off('token_metrics_update', handlePriceUpdate);
       }
     };
-  }, [tokenAddress]);
+  }, [tokenAddress, tokenSupply]);
 
   return (
     <div className="price-chart-container" style={{ height }}>
