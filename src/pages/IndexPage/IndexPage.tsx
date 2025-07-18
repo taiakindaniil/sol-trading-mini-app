@@ -90,6 +90,7 @@ export const IndexPage: FC = () => {
             ))}
           </OptionBlock>
         </div>
+        
         {loading ? (
           <List style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '100%' }}>
             <Spinner size="m" />

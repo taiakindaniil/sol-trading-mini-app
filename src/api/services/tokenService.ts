@@ -9,6 +9,8 @@ export interface TokenData {
   max_supply: number | null;
   image_uri: string;
   status: string;
+  mint_authority: string | null;
+  freeze_authority: string | null;
   tx_hash: string;
   created_at: string;
   updated_at: string;

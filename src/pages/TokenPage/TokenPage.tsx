@@ -21,6 +21,7 @@ import { Page } from '@/components/Page';
 import { WalletAddress } from '@/components/WalletAddress/WalletAddress';
 import { BuySellButtons } from '@/components/BuySellButtons/BuySellButtons';
 import { PriceChart } from '@/components/PriceChart/PriceChart';
+import { Audit } from '@/components/Audit/Audit';
 // import { bem } from '@/css/bem';
 import { useApi } from '@/api';
 
@@ -344,6 +345,8 @@ export const TokenPage: FC = () => {
               </div>
             </div>
           )}
+
+          <Audit buttonStyle={{position: 'absolute', marginTop: '20px', left: '10px'}} mintAuthority={tokenData?.token.mint_authority ?? null} freezeAuthority={tokenData?.token.freeze_authority ?? null} />
           
           <PriceChart 
             tokenAddress={tokenAddress || ""} 
