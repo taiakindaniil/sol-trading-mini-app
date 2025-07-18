@@ -73,7 +73,7 @@ export const PriceChart: FC<PriceChartProps> = ({ tokenAddress, tokenSupply, ini
             return date.toLocaleTimeString();
           },
           priceFormatter: (price: number) => {
-            return `${formatMarketCap(price)}`;
+            return `${formatMarketCap(price, 3)}`;
           },
         },
       });

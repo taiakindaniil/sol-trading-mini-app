@@ -3,7 +3,7 @@
  * @param marketCap - The market cap value to format
  * @returns A formatted string representation of the market cap
  */
-export const formatMarketCap = (marketCap: number): string => {
+export const formatMarketCap = (marketCap: number, decimals: number = 1): string => {
   if (marketCap === 0) return '0';
   
   const tiers = [
@@ -15,7 +15,7 @@ export const formatMarketCap = (marketCap: number): string => {
   
   for (const { value, suffix } of tiers) {
     if (marketCap >= value) {
-      return (marketCap / value).toFixed(1) + suffix;
+      return (marketCap / value).toFixed(decimals) + suffix;
     }
   }
   
