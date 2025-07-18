@@ -125,7 +125,7 @@ export const PriceChart: FC<PriceChartProps> = ({ tokenAddress, tokenSupply, ini
       setDebugInfo(`Chart error: ${error}`);
       console.error('Chart creation error:', error);
     }
-  }, [height]);
+  }, [height, prices]);
 
   // Socket updates
   useEffect(() => {
