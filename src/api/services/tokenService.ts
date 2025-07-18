@@ -124,8 +124,8 @@ class TokenService {
     return data.data[0];
   }
 
-  async getTokenPrices(tokenAddress: string): Promise<TokenPricesResponse> {
-    const { data } = await apiClient.get<TokenPricesResponse>(`/token/${tokenAddress}/prices`);
+  async getTokenPrices(tokenAddress: string, currency: string = 'usd'): Promise<TokenPricesResponse> {
+    const { data } = await apiClient.get<TokenPricesResponse>(`/token/${tokenAddress}/prices?currency=${currency}`);
     return data;
   }
 

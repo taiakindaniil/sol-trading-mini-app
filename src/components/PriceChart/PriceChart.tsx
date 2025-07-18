@@ -22,7 +22,7 @@ export const PriceChart: FC<PriceChartProps> = ({ tokenAddress, tokenSupply, ini
   const [prices, setPrices] = useState<TokenPricesResponse['data']['prices']>([]);
 
   useEffect(() => {
-    api.token.getTokenPrices(tokenAddress).then((data) => {
+    api.token.getTokenPrices(tokenAddress, 'usd').then((data) => {
       setPrices(data.data.prices);
     });
   }, [tokenAddress]);
@@ -133,8 +133,8 @@ export const PriceChart: FC<PriceChartProps> = ({ tokenAddress, tokenSupply, ini
     let socket: any;
     
     const handlePriceUpdate = (data: any) => {
-      if (data.token_address === tokenAddress && data.metrics?.token_price_sol && lineSeriesRef.current) {
-        const newPrice = parseFloat(data.metrics.token_price_sol);
+      if (data.token_address === tokenAddress && data.metrics?.token_price_usd && lineSeriesRef.current) {
+        const newPrice = parseFloat(data.metrics.token_price_usd);
 
         if (currentPrice != newPrice) {
           lineSeriesRef.current.update({
