@@ -1,7 +1,6 @@
 .price-chart-container {
   width: 100%;
   background: transparent;
-  border-radius: 10px;
   overflow: hidden;
   min-height: 270px;
 }

@@ -33,7 +33,7 @@ export const PriceChart: FC<PriceChartProps> = ({ tokenAddress, tokenSupply, ini
     try {
       const chart = createChart(container, {
         width: Math.max(container.offsetWidth, 400),
-        height: Math.max(height - 40, 230),
+        height: Math.max(height, 270),
         layout: {
           background: { color: 'black' },
           textColor: '#ffffff',
@@ -156,7 +156,7 @@ export const PriceChart: FC<PriceChartProps> = ({ tokenAddress, tokenSupply, ini
 
   return (
     <div className="price-chart-container" style={{ height }}>
-      <div className="price-chart-header">
+      {/* <div className="price-chart-header">
         <div className="price-info">
           <Text className="current-price">
             {currentPrice > 0 ? `$${currentPrice.toFixed(8)}` : 'No price data'}
@@ -165,12 +165,12 @@ export const PriceChart: FC<PriceChartProps> = ({ tokenAddress, tokenSupply, ini
         <Text style={{ fontSize: '10px', color: '#888' }}>
           {debugInfo}
         </Text>
-      </div>
+      </div> */}
       <div 
         ref={chartContainerRef} 
         className="price-chart"
         style={{ 
-          height: height - 40,
+          height: height,
           width: '100%',
           backgroundColor: '#1e1e1e',
           border: '1px solid #333'
