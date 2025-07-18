@@ -220,6 +220,9 @@ export const TokenPage: FC = () => {
       try {
         const data = await api.token.getTokenInfo(tokenAddress || "");
         setTokenData(data);
+
+        setTokenPrice(data.metrics?.price_usd ?? 0);
+        setTokenLiquidity(data.metrics?.liquidity?.usd ?? 0);
       } catch (error) {
         console.error("Error fetching token data:", error);
       }
