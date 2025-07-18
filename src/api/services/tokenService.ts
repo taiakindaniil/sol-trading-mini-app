@@ -96,6 +96,16 @@ export interface PositionsResponse {
 
 }
 
+export interface TokenPricesResponse {
+  data: {
+    prices: {
+      timestamp: string;
+      price: number;
+      datetime: string;
+    }[];
+  };
+}
+
 /**
  * Service for handling trading-related API calls
  */
@@ -112,6 +122,11 @@ class TokenService {
   async getTokenInfo(tokenAddress: string): Promise<TokenInfo> {
     const { data } = await apiClient.get<TokensResponse>(`/token/${tokenAddress}`);
     return data.data[0];
+  }
+
+  async getTokenPrices(tokenAddress: string): Promise<TokenPricesResponse> {
+    const { data } = await apiClient.get<TokenPricesResponse>(`/token/${tokenAddress}/prices`);
+    return data;
   }
 
   async searchToken(tokenAddress: string): Promise<TokenInfo> {

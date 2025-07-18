@@ -2,20 +2,30 @@ import { FC, useEffect, useRef, useState } from 'react';
 import { createChart, ISeriesApi, AreaSeries, UTCTimestamp } from 'lightweight-charts';
 import { formatMarketCap } from '@/helpers/formatters';
 import './PriceChart.css';
+import { useApi } from '@/api';
+import { TokenPricesResponse } from '@/api/services/tokenService';
 
 interface PriceChartProps {
   tokenAddress: string;
-  tokenSupply: number;
+  tokenSupply: number;  
   initialPrice?: number;
   height?: number;
 }
 
 export const PriceChart: FC<PriceChartProps> = ({ tokenAddress, tokenSupply, initialPrice = 0, height = 270 }) => {
+  const api = useApi();
   const chartContainerRef = useRef<HTMLDivElement>(null);
   const lineSeriesRef = useRef<ISeriesApi<'Area'> | null>(null);
   const [chartReady, setChartReady] = useState(false);
   const [currentPrice, setCurrentPrice] = useState<number>(initialPrice);
   const [_, setDebugInfo] = useState<string>('Initializing...');
+  const [prices, setPrices] = useState<TokenPricesResponse['data']['prices']>([]);
+
+  useEffect(() => {
+    api.token.getTokenPrices(tokenAddress).then((data) => {
+      setPrices(data.data.prices);
+    });
+  }, [tokenAddress]);
 
   useEffect(() => {
     if (!chartContainerRef.current) {
@@ -86,14 +96,10 @@ export const PriceChart: FC<PriceChartProps> = ({ tokenAddress, tokenSupply, ini
       });
 
       // Add sample data
-      const now = Math.floor(Date.now() / 1000);
-      const sampleData = [
-        { time: (now - 3600) as UTCTimestamp, value: 0.001 * tokenSupply },
-        { time: (now - 2700) as UTCTimestamp, value: 0.0015 * tokenSupply },
-        { time: (now - 1800) as UTCTimestamp, value: 0.0012 * tokenSupply },
-        { time: (now - 900) as UTCTimestamp, value: 0.0018 * tokenSupply },
-        { time: now as UTCTimestamp, value: 0.0016 * tokenSupply },
-      ];
+      const sampleData = prices.map((price) => ({
+        time: new Date(price.datetime).getTime() / 1000 as UTCTimestamp,
+        value: price.price * tokenSupply
+      }));
 
       lineSeriesRef.current.setData(sampleData);
       setCurrentPrice(0.0016);
