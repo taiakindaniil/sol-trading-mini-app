@@ -170,7 +170,7 @@ export const PriceChart: FC<PriceChartProps> = ({ tokenAddress, tokenSupply, ini
         className="price-chart"
         style={{ 
           height: height,
-          width: '100%',
+          width: '100',
         }}
       />
       {!chartReady && (

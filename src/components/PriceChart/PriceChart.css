@@ -1,5 +1,6 @@
 .price-chart-container {
-  width: 100%;
+  width: 100vw;
+  margin-left: -36px; /* paddings */
   background: transparent;
   overflow: hidden;
   min-height: 270px;
