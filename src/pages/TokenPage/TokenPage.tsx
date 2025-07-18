@@ -59,6 +59,10 @@ export const TokenPage: FC = () => {
   const [buyValue, setBuyValue] = useState<string>("0.01");
   const [sellValue, setSellValue] = useState<string>("25");
   const [txHistory, setTxHistory] = useState<TokenTxHistoryResponse | null>(null);
+
+  const [tokenPrice, setTokenPrice] = useState<number>(0);
+  const [tokenLiquidity, setTokenLiquidity] = useState<number>(0);
+
   
   // Flag to prevent updates during initial loading
   const [isInitialLoad, setIsInitialLoad] = useState(true);
@@ -172,6 +176,12 @@ export const TokenPage: FC = () => {
 
     socket.on('response', (data: any) => {
       console.log('Token price update:', data);
+    });
+
+    socket.on('token_metrics_update', (data: any) => {
+      console.log('Token metrics update:', data);
+      setTokenPrice(data.metrics.token_price_usd);
+      setTokenLiquidity(data.metrics.liquidity_usd);
     });
 
     // Cleanup function to disconnect socket when component unmounts
@@ -317,7 +327,7 @@ export const TokenPage: FC = () => {
                     Liq
                   </Text>
                   <Text className="token-info-value">
-                    ${formatMarketCap(tokenData.metrics?.liquidity?.usd ?? 0)}
+                    ${formatMarketCap(tokenLiquidity ?? tokenData.metrics?.liquidity?.usd ?? 0)}
                   </Text>
                 </div>
                 <div>
@@ -325,7 +335,7 @@ export const TokenPage: FC = () => {
                     MC
                   </Text>
                   <Text className="token-info-value">
-                    ${formatMarketCap(tokenData.metrics?.market_cap ?? 0)}
+                    ${formatMarketCap(tokenPrice * (tokenData.token.max_supply ?? 1e9))}
                   </Text>
                 </div>
               </div>
